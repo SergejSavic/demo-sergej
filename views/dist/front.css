@@ -1,0 +1,64 @@
+div.container {
+    border: 2px solid black;
+    width: 50vw;
+    height: 74vh;
+    margin: 0 auto;
+    margin-top: 3vh;
+}
+
+img.headerImage {
+    padding-left: 1vw;
+    width: 20vw;
+    height: 10vh;
+}
+
+div.contentContainer {
+    border: 2px solid black;
+    height: 40vh;
+    width: 25vw;
+    margin: 10vh auto;
+}
+
+div.text {
+    width: 22vw;
+    margin-left: 1.5vw;
+}
+
+img.contentImage {
+    height: 12vh;
+    width: 25vw;
+}
+
+h2 {
+    font-size: 26px;
+    width: 18vw;
+    font-weight: 100;
+    margin-left: 3.5vw;
+    color: yellow;
+}
+
+p {
+    font-size: 19px;
+    font-weight: 400;
+}
+
+button {
+    background: #ff781f;
+    cursor: pointer;
+    color: white;
+    font-size: 23px;
+    border: none;
+    border-radius: 10px;
+    width: 15vw;
+    margin-left: 5vw;
+    margin-top: 1vh;
+    height: 6vh;
+}
+
+span.first {
+    margin-left: 1.5vw;
+}
+
+span.second {
+    margin-left: 3vw;
+}
