@@ -42,18 +42,6 @@ class Demo extends Module
         return true;
     }
 
-    public function loadAsset()
-    {
-        $this->addJsDefList();
-        $this->context->controller->addCSS($this->_path . 'views/dist/front.css', 'all');
-        $this->context->controller->addJS($this->_path . 'views/dist/back.js');
-    }
-
-    public function getContent()
-    {
-        $this->loadAsset();
-    }
-
     public function hookDisplayBackOfficeHeader()
     {
         if (false !== strpos(Tools::getValue('controller'), 'AdminDemo')) {
