@@ -7,6 +7,10 @@ if (!defined('_PS_VERSION_'))
 
 class Demo extends Module
 {
+
+    const HOOK_LIST = [
+        'displayBackOfficeHeader'
+    ];
     public $tabs = [
         [
             'name' => 'CleverReach Demo',
@@ -33,8 +37,38 @@ class Demo extends Module
 
     public function install()
     {
-        return parent::install();
+        parent::install();
+        $this->registerHook(static::HOOK_LIST);
+        return true;
     }
+
+    public function loadAsset()
+    {
+        $this->addJsDefList();
+        $this->context->controller->addCSS($this->_path . 'views/dist/front.css', 'all');
+        $this->context->controller->addJS($this->_path . 'views/dist/back.js');
+    }
+
+    public function getContent()
+    {
+        $this->loadAsset();
+    }
+
+    public function hookDisplayBackOfficeHeader()
+    {
+        if (false !== strpos(Tools::getValue('controller'), 'AdminDemo')) {
+            $this->initControllerAssets();
+        }
+    }
+
+    private function initControllerAssets()
+    {
+        if (Tools::getValue('controller') === 'AdminDemo') {
+            $this->context->controller->addCSS($this->_path . 'views/dist/admin.css');
+            $this->context->controller->addJS($this->_path . 'views/dist/back.js');
+        }
+    }
+
 }
 
 
