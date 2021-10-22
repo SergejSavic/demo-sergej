@@ -7,7 +7,6 @@ if (!defined('_PS_VERSION_'))
 
 class Demo extends Module
 {
-
     const HOOK_LIST = [
         'displayBackOfficeHeader',
         'actionFrontControllerSetMedia'
@@ -43,6 +42,7 @@ class Demo extends Module
             CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'api_client_table` (
             `id_client` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `access_token` varchar(500) NOT NULL,
+            `id_field` varchar(100) NOT NULL,
             PRIMARY KEY (`id_client`)
             ) ENGINE = ' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;')
             && $this->registerHook(static::HOOK_LIST);
@@ -65,9 +65,8 @@ class Demo extends Module
     {
         if (Tools::getValue('controller') === 'AdminDemo') {
             $this->context->controller->addCSS($this->_path . 'views/dist/admin.css');
-            $this->context->controller->addJS($this->_path . 'views/dist/back.js');
-        } elseif (Tools::getValue('controller') === 'AdminDemoSynchronization') {
             $this->context->controller->addCSS($this->_path . 'views/dist/sync_page.css');
+            $this->context->controller->addJS($this->_path . 'views/dist/back.js');
         }
     }
 

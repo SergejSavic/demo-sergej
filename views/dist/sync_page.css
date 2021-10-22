@@ -2,7 +2,7 @@ body {
     background: white;
 }
 
-div.container {
+div.containerSync {
     border: 2px solid black;
     width: 50vw;
     height: 64vh;
@@ -10,13 +10,13 @@ div.container {
     margin-top: 3vh;
 }
 
-img.headerImage {
+img.headerImageSync {
     padding-left: 1vw;
     width: 20vw;
     height: 10vh;
 }
 
-p.clientId {
+p.clientIdSync {
     font-size: 23px;
     font-weight: 700;
     float: right;
@@ -24,41 +24,41 @@ p.clientId {
     display: inline-block;
 }
 
-div.contentContainer {
+div.contentContainerSync {
     width: 30vw;
     margin: 0 auto;
     margin-top: 15vh;
 }
 
-span.syncStatus {
+span.syncStatusSync {
     font-size: 20px;
 }
 
-span.Done {
+span.DoneSync {
     font-size: 20px;
     margin-left: 5vw;
     color: green;
 }
 
-span.inProgress {
+span.inProgressSync {
     font-size: 20px;
     margin-left: .2vw;
     color: coral;
 }
 
-span.Error {
+span.ErrorSync {
     font-size: 20px;
     margin-left: .2vw;
     color: red;
 }
 
-span.pipe {
+span.pipeSync {
     margin: 0 .3vw;
     color: black;
     font-size: 20px;
 }
 
-button.submitBtn {
+button.submitBtnSync {
     background: #ff781f;
     cursor: pointer;
     color: white;

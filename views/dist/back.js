@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         setTimeout(myFunction, 7000)
     });
 
-
     function myFunction() {
         location.reload();
     }

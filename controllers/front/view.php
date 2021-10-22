@@ -20,9 +20,10 @@ class DemoViewModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         $accessParameters = $this->authService->getAccessParameters($_GET['code']);
+        $id = $this->authService->getId($accessParameters['access_token']);
 
         if (AuthenticationValidator::validate($accessParameters)) {
-            $this->apiClientService->createApiClient($accessParameters['access_token']);
+            $this->apiClientService->createApiClient($accessParameters['access_token'], $id);
         }
     }
 

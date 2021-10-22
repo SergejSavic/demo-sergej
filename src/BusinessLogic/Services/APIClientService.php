@@ -3,6 +3,7 @@
 namespace App\BusinessLogic\Services;
 
 use App\DataAccessLayer\APIClientRepository;
+use App\Presentation\Models\APIClient;
 
 class APIClientService
 {
@@ -13,13 +14,13 @@ class APIClientService
         $this->apiClientRepository = new APIClientRepository();
     }
 
-    public function createApiClient(string $token)
+    public function createApiClient(string $token, string $id)
     {
-        return $this->apiClientRepository->createApiClient($token);
+        return $this->apiClientRepository->createApiClient($token, $id);
     }
 
-    public function getApiClients()
+    public function returnApiClient()
     {
-        return $this->apiClientRepository->getApiClients();
+        return $this->apiClientRepository->returnApiClient();
     }
 }

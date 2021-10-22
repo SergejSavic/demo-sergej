@@ -28,6 +28,13 @@ class AuthenticationService
         $fields = ['client_id' => AuthenticationService::getClientID(), 'client_secret' => AuthenticationService::getClientSecret(),
             'redirect_uri' => 'http://prestashop.test/en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code];
 
-        return $this->proxy->get("https://rest.cleverreach.com/oauth/token.php", $fields);
+        return $this->proxy->post("https://rest.cleverreach.com/oauth/token.php", $fields);
+    }
+
+    public function getId(string $access_token): string
+    {
+        $userData = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/debug/whoami.json', $access_token);
+
+        return $userData['id'];
     }
 }

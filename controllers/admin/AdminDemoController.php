@@ -5,6 +5,7 @@ use App\BusinessLogic\Services\APIClientService;
 class AdminDemoController extends ModuleAdminController
 {
     private APIClientService $apiClientService;
+
     public function __construct()
     {
         $this->bootstrap = true;
@@ -14,17 +15,16 @@ class AdminDemoController extends ModuleAdminController
 
     public function initContent()
     {
-        /*
-        parent::initContent();
-        $this->setTemplate($this->module->template_dir . 'origin.tpl');
-        */
-        //$apis = $this->apiClientService->getApiClients();
+        if (!$this->apiClientService->returnApiClient()) {
+            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'origin.tpl', $this->context->smarty);
+        } else {
+            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'sync_page.tpl', $this->context->smarty);
+            $template->assign(array(
+                'my_var' => "test"
+            ));
+        }
 
-        $tpl = $this->context->smarty->createTemplate($this->getTemplatePath() . 'origin.tpl', $this->context->smarty);
-        $tpl->assign(array(
-            'my_var' => "test"
-        ));
-        $this->content .= $tpl->fetch();
+        $this->content .= $template->fetch();
         parent::initContent();
     }
 
