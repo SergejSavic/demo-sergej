@@ -9,7 +9,8 @@ class Demo extends Module
 {
 
     const HOOK_LIST = [
-        'displayBackOfficeHeader'
+        'displayBackOfficeHeader',
+        'actionFrontControllerSetMedia'
     ];
     public $tabs = [
         [
@@ -37,9 +38,20 @@ class Demo extends Module
 
     public function install()
     {
-        parent::install();
-        $this->registerHook(static::HOOK_LIST);
-        return true;
+        return parent::install() &&
+            Db::getInstance()->execute('
+            CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'api_client_table` (
+            `id_client` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            `access_token` varchar(500) NOT NULL,
+            PRIMARY KEY (`id_client`)
+            ) ENGINE = ' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;')
+            && $this->registerHook(static::HOOK_LIST);
+    }
+
+    public function uninstall()
+    {
+        return parent::uninstall() &&
+            Db::getInstance()->execute('DROP TABLE IF EXISTS`' . _DB_PREFIX_ . 'api_client_table`');
     }
 
     public function hookDisplayBackOfficeHeader()
@@ -54,6 +66,8 @@ class Demo extends Module
         if (Tools::getValue('controller') === 'AdminDemo') {
             $this->context->controller->addCSS($this->_path . 'views/dist/admin.css');
             $this->context->controller->addJS($this->_path . 'views/dist/back.js');
+        } elseif (Tools::getValue('controller') === 'AdminDemoSynchronization') {
+            $this->context->controller->addCSS($this->_path . 'views/dist/sync_page.css');
         }
     }
 

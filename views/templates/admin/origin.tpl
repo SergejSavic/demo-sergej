@@ -1,6 +1,4 @@
-<head>
-
-</head>
+<head></head>
 <body>
 <div class="container">
     <img class="headerImage" src="http://prestashop.test/modules/cleverreach/views/img/logo_cleverreach.svg">
@@ -14,6 +12,4 @@
             <button class="submitBtn" type="submit">Connect</button>
         </div>
 </div>
-
-<script type="text/javascript" src="../../modules/demo/views/dist/back.js"></script>
 </body>

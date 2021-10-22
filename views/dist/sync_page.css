@@ -1,0 +1,72 @@
+body {
+    background: white;
+}
+
+div.container {
+    border: 2px solid black;
+    width: 50vw;
+    height: 64vh;
+    margin: 0 auto;
+    margin-top: 3vh;
+}
+
+img.headerImage {
+    padding-left: 1vw;
+    width: 20vw;
+    height: 10vh;
+}
+
+p.clientId {
+    font-size: 23px;
+    font-weight: 700;
+    float: right;
+    margin: 2vh 3vh;
+    display: inline-block;
+}
+
+div.contentContainer {
+    width: 30vw;
+    margin: 0 auto;
+    margin-top: 15vh;
+}
+
+span.syncStatus {
+    font-size: 20px;
+}
+
+span.Done {
+    font-size: 20px;
+    margin-left: 5vw;
+    color: green;
+}
+
+span.inProgress {
+    font-size: 20px;
+    margin-left: .2vw;
+    color: coral;
+}
+
+span.Error {
+    font-size: 20px;
+    margin-left: .2vw;
+    color: red;
+}
+
+span.pipe {
+    margin: 0 .3vw;
+    color: black;
+    font-size: 20px;
+}
+
+button.submitBtn {
+    background: #ff781f;
+    cursor: pointer;
+    color: white;
+    font-size: 23px;
+    border: none;
+    border-radius: 10px;
+    width: 12vw;
+    margin-left: 9vw;
+    margin-top: 14vh;
+    height: 6vh;
+}
