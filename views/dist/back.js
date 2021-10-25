@@ -1,17 +1,18 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    let container = document.getElementsByClassName("container")[0];
-    let button = document.getElementsByClassName("submitBtn")[0];
-    let contentContainer = document.getElementsByClassName("contentContainer")[0];
-    let headerImage = document.getElementsByClassName("headerImage")[0];
-    let element = '<iframe id="frameId" style="height: 60vh; width: 63vw; margin-left: 0vw;" src="http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' +
-        'http://prestashop.test/en/module/demo/view"></iframe>';
+    let container = document.getElementById('container');
+    let button = document.getElementById('submitBtn');
+    let contentContainer = document.getElementById('contentContainer');
+    let headerImage = document.getElementById('headerImage');
+    let iframe = document.createElement('iframe');
+    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=http://prestashop.test/en/module/demo/view';
+    iframe.style.cssText += 'height: 60vh; width: 63vw; margin-left: 0vw;';
 
     button.addEventListener("click", function () {
         container.style.border = 'none';
         contentContainer.style.display = 'none';
         headerImage.style.display = 'none';
-        container.innerHTML = element;
-        setTimeout(myFunction, 7000)
+        container.appendChild(iframe);
+        setTimeout(myFunction, 9000)
     });
 
     function myFunction() {
