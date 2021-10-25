@@ -1,13 +1,19 @@
 <?php
 
-use App\BusinessLogic\Services\AuthenticationService;
-use App\BusinessLogic\Validators\AuthenticationValidator;
-use App\BusinessLogic\Services\APIClientService;
+use CleverReachIntegration\BusinessLogic\Services\AuthenticationService;
+use CleverReachIntegration\BusinessLogic\Validators\AuthenticationValidator;
+use CleverReachIntegration\BusinessLogic\Services\APIClientService;
 
 class DemoViewModuleFrontController extends ModuleFrontController
 {
-    private AuthenticationService $authService;
-    private APIClientService $apiClientService;
+    /**
+     * @var AuthenticationService
+     */
+    private $authService;
+    /**
+     * @var APIClientService
+     */
+    private $apiClientService;
 
     public function __construct()
     {

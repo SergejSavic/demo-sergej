@@ -1,15 +1,26 @@
 <?php
 
-namespace App\Presentation\Models;
+namespace CleverReachIntegration\Presentation\Models;
 
 use ObjectModelCore;
 
 class APIClient extends ObjectModelCore
 {
-    public int $id_client;
-    public string $access_token;
-    public string $id_field;
-
+    /**
+     * @var int
+     */
+    public $id_client;
+    /**
+     * @var string
+     */
+    public $access_token;
+    /**
+     * @var string
+     */
+    public $id_field;
+    /**
+     * @var array
+     */
     public static $definition = array(
         'table' => 'api_client_table',
         'primary' => 'id_client',

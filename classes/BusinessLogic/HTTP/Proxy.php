@@ -1,9 +1,14 @@
 <?php
 
-namespace App\BusinessLogic\HTTP;
+namespace CleverReachIntegration\BusinessLogic\HTTP;
 
 class Proxy
 {
+    /**
+     * @param string $url
+     * @param array $fields
+     * @return mixed
+     */
     public function post(string $url, array $fields)
     {
         $curl = curl_init();
@@ -15,6 +20,11 @@ class Proxy
         return json_decode(curl_exec($curl), true);
     }
 
+    /**
+     * @param string $url
+     * @param string $access_token
+     * @return mixed
+     */
     public function getWithHTTPHeader(string $url, string $access_token)
     {
         $curl = curl_init();

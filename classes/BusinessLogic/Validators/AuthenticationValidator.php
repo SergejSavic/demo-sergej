@@ -1,10 +1,14 @@
 <?php
 
-namespace App\BusinessLogic\Validators;
+namespace CleverReachIntegration\BusinessLogic\Validators;
 
 class AuthenticationValidator
 {
-    public static function validate(array $accessParameters): bool
+    /**
+     * @param array $accessParameters
+     * @return bool
+     */
+    public static function validate(array $accessParameters)
     {
         if($accessParameters['access_token']
         && $accessParameters['refresh_token']

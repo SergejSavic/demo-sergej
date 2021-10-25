@@ -1,10 +1,13 @@
 <?php
 
-use App\BusinessLogic\Services\APIClientService;
+use CleverReachIntegration\BusinessLogic\Services\APIClientService;
 
 class AdminDemoController extends ModuleAdminController
 {
-    private APIClientService $apiClientService;
+    /**
+     * @var APIClientService
+     */
+    private $apiClientService;
 
     public function __construct()
     {
@@ -13,6 +16,9 @@ class AdminDemoController extends ModuleAdminController
         parent::__construct();
     }
 
+    /**
+     * @throws SmartyException
+     */
     public function initContent()
     {
         if (!$this->apiClientService->returnApiClientID()) {
