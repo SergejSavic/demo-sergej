@@ -14,20 +14,11 @@ class APIClientRepository
         $apiClient->save();
     }
 
-    public function returnApiClient()
-    {
-        $tableName = $this->getApiClientTable();
-        $query = 'SELECT `id_client` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
-        $res = \Db::getInstance()->getValue($query);
-
-        return \Db::getInstance()->getValue($query);
-    }
-
     public function returnApiClientID()
     {
         $tableName = $this->getApiClientTable();
-        $query = 'SELECT `id_client` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
-
+        $query = 'SELECT `id_field` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+        $res = \Db::getInstance()->getValue($query);
         return \Db::getInstance()->getValue($query);
     }
 

@@ -19,8 +19,8 @@ class APIClientService
         return $this->apiClientRepository->createApiClient($token, $id);
     }
 
-    public function returnApiClient()
+    public function returnApiClientID()
     {
-        return $this->apiClientRepository->returnApiClient();
+        return $this->apiClientRepository->returnApiClientID();
     }
 }
