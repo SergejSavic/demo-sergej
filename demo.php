@@ -64,9 +64,15 @@ class Demo extends Module
     private function initControllerAssets()
     {
         if (Tools::getValue('controller') === 'AdminDemo') {
-            $this->context->controller->addCSS($this->_path . 'views/dist/admin.css');
-            $this->context->controller->addCSS($this->_path . 'views/dist/sync_page.css');
-            $this->context->controller->addJS($this->_path . 'views/dist/back.js');
+            $adminajax_link = $this->context->link->getAdminLink('AdminDemo');
+            Media::addJsDef(array(
+
+                "adminajax_link" => $adminajax_link
+
+            ));
+            $this->context->controller->addCSS($this->_path . 'views/dist/css/admin.css');
+            $this->context->controller->addCSS($this->_path . 'views/dist/css/sync_page.css');
+            $this->context->controller->addJS($this->_path . 'views/dist/js/back.js');
         }
     }
 

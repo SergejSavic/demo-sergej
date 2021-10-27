@@ -36,6 +36,12 @@ span.DoneSync {
     color: green;
 }
 
+.iframe {
+    height: 60vh;
+    width: 63vw;
+    margin-left: 0vw;
+}
+
 span.inProgressSync {
     font-size: 20px;
     margin-left: .2vw;
@@ -65,4 +71,8 @@ button.submitBtnSync {
     margin-left: 9vw;
     margin-top: 14vh;
     height: 6vh;
+}
+
+#containerBody {
+    background: white;
 }

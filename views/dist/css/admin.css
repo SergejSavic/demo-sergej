@@ -24,6 +24,13 @@ div.connectDiv {
     margin-left: 2.5vw;
 }
 
+.iframe {
+    border: 2px solid black;
+    height: 60vh;
+    width: 63vw;
+    margin-left: 0vw;
+}
+
 img.contentImage {
     height: 10vh;
     width: 18vw;
