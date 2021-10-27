@@ -32,4 +32,51 @@ class APIClientService
     {
         return $this->apiClientRepository->returnApiClientID();
     }
+
+    public function synchronize()
+    {
+        $this->changeSyncStatus("in progress");
+        $this->getApiGroup();
+        $this->getApiCustomers();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFirstTimeLoad()
+    {
+        return $this->apiClientRepository->isFirstTimeLoad();
+    }
+
+    public function changeLoadStatus()
+    {
+        $this->apiClientRepository->changeLoadStatus();
+    }
+
+    /**
+     * @param string $status
+     */
+    private function changeSyncStatus($status)
+    {
+        $this->apiClientRepository->changeSyncStatus($status);
+    }
+
+    private function getApiGroup()
+    {
+        if(isGroupExisting("name")) {
+            //return group
+        } else {
+            //create new group
+        }
+    }
+
+    private function isGroupExisting(string $name)
+    {
+        //return group if exists
+    }
+
+    private function getApiCustomers()
+    {
+        //return all active customers
+    }
 }

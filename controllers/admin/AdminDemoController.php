@@ -30,9 +30,19 @@ class AdminDemoController extends ModuleAdminController
                 'clientID' => $clientID
             ));
         }
-
+        if ($this->apiClientService->isFirstTimeLoad()) {
+            $this->apiClientService->changeLoadStatus();
+            $this->apiClientService->synchronize();
+        }
         $this->content .= $template->fetch();
         parent::initContent();
+    }
+
+    public function ajaxProcessCheckIfClientExist()
+    {
+        $clientID = $this->apiClientService->returnApiClientID();
+        echo ($clientID !== false) ? json_encode(true) : json_encode(false);
+        exit;
     }
 
 }

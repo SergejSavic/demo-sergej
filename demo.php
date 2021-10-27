@@ -43,6 +43,8 @@ class Demo extends Module
             `id_client` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `access_token` varchar(500) NOT NULL,
             `id_field` varchar(100) NOT NULL,
+            `is_first_time_load` tinyint(1) NOT NULL,
+            `sync_status` varchar(50) NOT NULL,
             PRIMARY KEY (`id_client`)
             ) ENGINE = ' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;')
             && $this->registerHook(static::HOOK_LIST);
@@ -64,11 +66,9 @@ class Demo extends Module
     private function initControllerAssets()
     {
         if (Tools::getValue('controller') === 'AdminDemo') {
-            $adminajax_link = $this->context->link->getAdminLink('AdminDemo');
+            $adminAjaxLink = $this->context->link->getAdminLink('AdminDemo');
             Media::addJsDef(array(
-
-                "adminajax_link" => $adminajax_link
-
+                "adminAjaxLink" => $adminAjaxLink
             ));
             $this->context->controller->addCSS($this->_path . 'views/dist/css/admin.css');
             $this->context->controller->addCSS($this->_path . 'views/dist/css/sync_page.css');

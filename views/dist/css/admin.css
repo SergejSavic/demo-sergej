@@ -1,5 +1,4 @@
 div.container {
-    border: 2px solid black;
     width: 50vw;
     height: 64vh;
     margin: 0 auto;
@@ -68,6 +67,18 @@ span.first {
 
 span.second {
     margin-left: 3vw;
+}
+
+.noDisplay {
+    display: none;
+}
+
+.border {
+    border: 2px solid black;
+}
+
+.noBorder {
+    border: none;
 }
 
 #containerBody {

@@ -19,15 +19,23 @@ class APIClient extends ObjectModelCore
      */
     public $id_field;
     /**
-     * @var array
+     * @var bool
      */
+    public $is_first_time_load;
+    /**
+     * @var string
+     */
+    public $sync_status;
+
     public static $definition = array(
         'table' => 'api_client_table',
         'primary' => 'id_client',
         'multilang' => false,
         'fields' => array(
             'access_token' => array('type' => self::TYPE_STRING, 'required' => true),
-            'id_field' => array('type' => self::TYPE_STRING, 'required' => true)
+            'id_field' => array('type' => self::TYPE_STRING, 'required' => true),
+            'is_first_time_load' => array('type' => self::TYPE_BOOL, 'required' => true),
+            'sync_status' => array('type' => self::TYPE_STRING, 'required' => true)
         )
     );
 
