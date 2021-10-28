@@ -36,8 +36,18 @@ class APIClientService
     }
 
     /**
+     * @return bool
+     */
+    public function clientExists()
+    {
+        return (bool)$this->getClientID();
+    }
+
+    /**
      * @param string $token
      * @param string $id
+     * @return bool
+     * @throws \PrestaShopException
      */
     public function createApiClient($token, $id)
     {
@@ -47,9 +57,9 @@ class APIClientService
     /**
      * @return false|string
      */
-    public function returnApiClientID()
+    public function getClientID()
     {
-        return $this->apiClientRepository->returnApiClientID();
+        return $this->apiClientRepository->getClientID();
     }
 
     /**

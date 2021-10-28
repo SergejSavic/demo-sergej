@@ -31,6 +31,7 @@ class DemoViewModuleFrontController extends ModuleFrontController
 
     /**
      * Creates Api client
+     * @throws PrestaShopException
      */
     public function initContent()
     {

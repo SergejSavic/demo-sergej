@@ -27,21 +27,17 @@ class AdminDemoController extends ModuleAdminController
      */
     public function initContent()
     {
-        if (!$this->apiClientService->returnApiClientID()) {
-            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'origin.tpl', $this->context->smarty);
+        if (!$this->apiClientService->clientExists()) {
+            $this->setTemplateFile('origin.tpl', array());
         } else {
-            $clientID = $this->apiClientService->returnApiClientID();
-            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'syncPage.tpl', $this->context->smarty);
-            $template->assign(array(
-                'clientID' => $clientID
-            ));
+            $clientID = $this->apiClientService->getClientID();
+            $this->setTemplateFile('syncPage.tpl', array('clientID' => $clientID));
         }
         $this->apiClientService->synchronize();
         /*if ($this->apiClientService->isFirstTimeLoad()) {
             $this->apiClientService->changeLoadStatus();
             $this->apiClientService->synchronize();
         }*/
-        $this->content .= $template->fetch();
         parent::initContent();
     }
 
@@ -50,9 +46,21 @@ class AdminDemoController extends ModuleAdminController
      */
     public function ajaxProcessCheckIfClientExist()
     {
-        $clientID = $this->apiClientService->returnApiClientID();
+        $clientID = $this->apiClientService->getClientID();
         echo ($clientID !== false) ? json_encode(true) : json_encode(false);
         exit;
+    }
+
+    /**
+     * @param string $templateName
+     * @param array $variables
+     * @throws SmartyException
+     */
+    private function setTemplateFile($templateName, $variables)
+    {
+        $template = $this->context->smarty->createTemplate($this->getTemplatePath() . $templateName, $this->context->smarty);
+        $template->assign($variables);
+        $this->content .= $template->fetch();
     }
 
 }

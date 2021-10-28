@@ -11,8 +11,9 @@ use CleverReachIntegration\Presentation\Models\APIClient;
 class APIClientRepository
 {
     /**
-     * @param string $token
-     * @param string $id
+     * @param $token
+     * @param $id
+     * @return bool
      * @throws \PrestaShopException
      */
     public function createApiClient($token, $id)
@@ -22,13 +23,13 @@ class APIClientRepository
         $apiClient->idField = $id;
         $apiClient->syncStatus = 'none';
         $apiClient->isFirstTimeLoad = 1;
-        $apiClient->save();
+        return $apiClient->save();
     }
 
     /**
      * @return false|string
      */
-    public function returnApiClientID()
+    public function getClientID()
     {
         $tableName = $this->getApiClientTable();
         $query = 'SELECT `idField` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
@@ -76,7 +77,7 @@ class APIClientRepository
      */
     public function changeLoadStatus()
     {
-        $id = $this->returnApiClientID();
+        $id = $this->getClientID();
         $tableName = $this->getApiClientTable();
         $updateData = array('isFirstTimeLoad' => 0);
         \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
@@ -87,7 +88,7 @@ class APIClientRepository
      */
     public function changeSyncStatus($status)
     {
-        $id = $this->returnApiClientID();
+        $id = $this->getClientID();
         $tableName = $this->getApiClientTable();
         $updateData = array('syncStatus' => $status);
         \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
