@@ -29,7 +29,7 @@ class DemoValidationModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
-        $clientID = $this->apiClientService->returnApiClientID();
+        $clientID = $this->apiClientService->getClientID();
         if ($clientID !== false) {
             return new JsonResponse(200);
         } else {

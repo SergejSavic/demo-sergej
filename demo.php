@@ -86,7 +86,7 @@ class Demo extends Module
                 "adminAjaxLink" => $adminAjaxLink
             ));
             $this->context->controller->addCSS($this->_path . 'views/dist/css/admin.css');
-            $this->context->controller->addCSS($this->_path . 'views/dist/css/sync_page.css');
+            $this->context->controller->addCSS($this->_path . 'views/dist/css/syncPage.css');
             $this->context->controller->addJS($this->_path . 'views/dist/js/back.js');
         }
     }

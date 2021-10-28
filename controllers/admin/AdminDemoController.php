@@ -27,18 +27,25 @@ class AdminDemoController extends ModuleAdminController
      */
     public function initContent()
     {
-        if (!$this->apiClientService->returnApiClientID()) {
-            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'origin.tpl', $this->context->smarty);
+        if (!$this->apiClientService->clientExists()) {
+            $this->setTemplateFile('origin.tpl', array());
         } else {
-            $clientID = $this->apiClientService->returnApiClientID();
-            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'sync_page.tpl', $this->context->smarty);
-            $template->assign(array(
-                'clientID' => $clientID
-            ));
+            $clientID = $this->apiClientService->getClientID();
+            $this->setTemplateFile('syncPage.tpl', array('clientID' => $clientID));
         }
-
-        $this->content .= $template->fetch();
         parent::initContent();
+    }
+
+    /**
+     * @param string $templateName
+     * @param array $variables
+     * @throws SmartyException
+     */
+    public function setTemplateFile($templateName, $variables)
+    {
+        $template = $this->context->smarty->createTemplate($this->getTemplatePath() . $templateName, $this->context->smarty);
+        $template->assign($variables);
+        $this->content .= $template->fetch();
     }
 
 }
