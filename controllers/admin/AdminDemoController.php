@@ -12,6 +12,9 @@ class AdminDemoController extends ModuleAdminController
      */
     private $apiClientService;
 
+    /**
+     * @throws PrestaShopException
+     */
     public function __construct()
     {
         $this->bootstrap = true;
@@ -28,7 +31,7 @@ class AdminDemoController extends ModuleAdminController
             $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'origin.tpl', $this->context->smarty);
         } else {
             $clientID = $this->apiClientService->returnApiClientID();
-            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'sync_page.tpl', $this->context->smarty);
+            $template = $this->context->smarty->createTemplate($this->getTemplatePath() . 'syncPage.tpl', $this->context->smarty);
             $template->assign(array(
                 'clientID' => $clientID
             ));
@@ -42,21 +45,9 @@ class AdminDemoController extends ModuleAdminController
         parent::initContent();
     }
 
-    public function ajaxProcessCheck()
-    {
-        /*$order = new Order(7);
-        $customer = new Customer(5);
-        $shop = new ShopGroupCore();
-        $price = $order->total_paid;
-        $products = $order->getProducts();
-        $customers = CustomerCore::getCustomers();
-        $orders = Order::getCustomerOrders(5);*/
-        //$products = $orders->getProducts();
-
-        echo json_encode('something');//something you want to return
-        exit;
-    }
-
+    /**
+     * Checks if api client exist
+     */
     public function ajaxProcessCheckIfClientExist()
     {
         $clientID = $this->apiClientService->returnApiClientID();

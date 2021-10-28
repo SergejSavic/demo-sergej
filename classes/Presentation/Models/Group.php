@@ -31,7 +31,7 @@ class Group
      * @param bool $locked
      * @param bool $backup
      */
-    public function __construct(string $name, string $receiverInfo, bool $locked = false, bool $backup = true)
+    public function __construct($name, $receiverInfo, $locked = false, $backup = true)
     {
         $this->name = $name;
         $this->receiverInfo = $receiverInfo;

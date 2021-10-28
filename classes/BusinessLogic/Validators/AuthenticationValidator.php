@@ -2,6 +2,10 @@
 
 namespace CleverReachIntegration\BusinessLogic\Validators;
 
+/**
+ * Class AuthenticationValidator
+ * @package CleverReachIntegration\BusinessLogic\Validators
+ */
 class AuthenticationValidator
 {
     /**

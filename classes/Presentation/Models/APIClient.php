@@ -4,38 +4,45 @@ namespace CleverReachIntegration\Presentation\Models;
 
 use ObjectModelCore;
 
+/**
+ * Class APIClient
+ * @package CleverReachIntegration\Presentation\Models
+ */
 class APIClient extends ObjectModelCore
 {
     /**
      * @var int
      */
-    public $id_client;
+    public $idClient;
     /**
      * @var string
      */
-    public $access_token;
+    public $accessToken;
     /**
      * @var string
      */
-    public $id_field;
+    public $idField;
     /**
      * @var bool
      */
-    public $is_first_time_load;
+    public $isFirstTimeLoad;
     /**
      * @var string
      */
-    public $sync_status;
+    public $syncStatus;
 
+    /**
+     * @var array
+     */
     public static $definition = array(
         'table' => 'api_client_table',
-        'primary' => 'id_client',
+        'primary' => 'idClient',
         'multilang' => false,
         'fields' => array(
-            'access_token' => array('type' => self::TYPE_STRING, 'required' => true),
-            'id_field' => array('type' => self::TYPE_STRING, 'required' => true),
-            'is_first_time_load' => array('type' => self::TYPE_BOOL, 'required' => true),
-            'sync_status' => array('type' => self::TYPE_STRING, 'required' => true)
+            'accessToken' => array('type' => self::TYPE_STRING, 'required' => true),
+            'idField' => array('type' => self::TYPE_STRING, 'required' => true),
+            'isFirstTimeLoad' => array('type' => self::TYPE_BOOL, 'required' => true),
+            'syncStatus' => array('type' => self::TYPE_STRING, 'required' => true)
         )
     );
 

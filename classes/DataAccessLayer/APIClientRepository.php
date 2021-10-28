@@ -4,6 +4,10 @@ namespace CleverReachIntegration\DataAccessLayer;
 
 use CleverReachIntegration\Presentation\Models\APIClient;
 
+/**
+ * Class APIClientRepository
+ * @package CleverReachIntegration\DataAccessLayer
+ */
 class APIClientRepository
 {
     /**
@@ -11,13 +15,13 @@ class APIClientRepository
      * @param string $id
      * @throws \PrestaShopException
      */
-    public function createApiClient(string $token, string $id)
+    public function createApiClient($token, $id)
     {
         $apiClient = new APIClient();
-        $apiClient->access_token = $token;
-        $apiClient->id_field = $id;
-        $apiClient->sync_status = 'none';
-        $apiClient->is_first_time_load = 1;
+        $apiClient->accessToken = $token;
+        $apiClient->idField = $id;
+        $apiClient->syncStatus = 'none';
+        $apiClient->isFirstTimeLoad = 1;
         $apiClient->save();
     }
 
@@ -27,7 +31,7 @@ class APIClientRepository
     public function returnApiClientID()
     {
         $tableName = $this->getApiClientTable();
-        $query = 'SELECT `id_field` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+        $query = 'SELECT `idField` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
         return \Db::getInstance()->getValue($query);
     }
@@ -38,7 +42,7 @@ class APIClientRepository
     public static function returnAccessToken()
     {
         $tableName = 'api_client_table';
-        $query = 'SELECT `access_token` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+        $query = 'SELECT `accessToken` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
         return \Db::getInstance()->getValue($query);
     }
@@ -62,17 +66,20 @@ class APIClientRepository
     public function isFirstTimeLoad()
     {
         $tableName = $this->getApiClientTable();
-        $query = 'SELECT `is_first_time_load` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+        $query = 'SELECT `isFirstTimeLoad` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
-        return (\Db::getInstance()->getValue($query) == 1 ) ? true : false;
+        return \Db::getInstance()->getValue($query) == 1;
     }
 
+    /**
+     * Changes load status of the synchronization page
+     */
     public function changeLoadStatus()
     {
         $id = $this->returnApiClientID();
         $tableName = $this->getApiClientTable();
-        $updateData = array('is_first_time_load' => 0);
-        \Db::getInstance()->update($tableName, $updateData, 'id_field=' .$id);
+        $updateData = array('isFirstTimeLoad' => 0);
+        \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
     }
 
     /**
@@ -82,8 +89,8 @@ class APIClientRepository
     {
         $id = $this->returnApiClientID();
         $tableName = $this->getApiClientTable();
-        $updateData = array('sync_status' => $status);
-        \Db::getInstance()->update($tableName, $updateData, 'id_field=' .$id);
+        $updateData = array('syncStatus' => $status);
+        \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
     }
 
     /**

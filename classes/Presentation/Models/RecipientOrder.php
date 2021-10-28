@@ -2,6 +2,10 @@
 
 namespace CleverReachIntegration\Presentation\Models;
 
+/**
+ * Class RecipientOrder
+ * @package CleverReachIntegration\Presentation\Models
+ */
 class RecipientOrder
 {
     /**

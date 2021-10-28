@@ -2,6 +2,10 @@
 
 namespace CleverReachIntegration\Presentation\Models;
 
+/**
+ * Class Recipient
+ * @package CleverReachIntegration\Presentation\Models
+ */
 class Recipient
 {
     /**

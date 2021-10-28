@@ -25,6 +25,9 @@ class APIClientService
      */
     private $token;
 
+    /**
+     * Initializes client repository and access token
+     */
     public function __construct()
     {
         $this->proxy = new Proxy();
@@ -36,7 +39,7 @@ class APIClientService
      * @param string $token
      * @param string $id
      */
-    public function createApiClient(string $token, string $id)
+    public function createApiClient($token, $id)
     {
         return $this->apiClientRepository->createApiClient($token, $id);
     }
@@ -49,11 +52,14 @@ class APIClientService
         return $this->apiClientRepository->returnApiClientID();
     }
 
+    /**
+     * Synchronizes recipients on api
+     */
     public function synchronize()
     {
         $this->changeSyncStatus("in progress");
         $group = $this->getApiGroup();
-        //$this->getApiCustomers();
+        //$this->getPrestaShopCustomers();
     }
 
     /**
@@ -64,6 +70,9 @@ class APIClientService
         return $this->apiClientRepository->isFirstTimeLoad();
     }
 
+    /**
+     * Changes load status of the synchronization page
+     */
     public function changeLoadStatus()
     {
         $this->apiClientRepository->changeLoadStatus();
@@ -93,7 +102,7 @@ class APIClientService
      * @param string $name
      * @return mixed|null
      */
-    private function isGroupExisting(string $name)
+    private function isGroupExisting($name)
     {
         $groups = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json', $this->token);
         foreach ($groups as $group) {
@@ -105,7 +114,10 @@ class APIClientService
         return null;
     }
 
-    private function getApiCustomers()
+    /**
+     * Returns prestashop customers
+     */
+    private function getPrestaShopCustomers()
     {
         //return all active customers
     }
