@@ -2,6 +2,9 @@
 
 use CleverReachIntegration\BusinessLogic\Services\APIClientService;
 
+/**
+ * Class AdminDemoController
+ */
 class AdminDemoController extends ModuleAdminController
 {
     /**
@@ -30,12 +33,28 @@ class AdminDemoController extends ModuleAdminController
                 'clientID' => $clientID
             ));
         }
-        if ($this->apiClientService->isFirstTimeLoad()) {
+        $this->apiClientService->synchronize();
+        /*if ($this->apiClientService->isFirstTimeLoad()) {
             $this->apiClientService->changeLoadStatus();
             $this->apiClientService->synchronize();
-        }
+        }*/
         $this->content .= $template->fetch();
         parent::initContent();
+    }
+
+    public function ajaxProcessCheck()
+    {
+        /*$order = new Order(7);
+        $customer = new Customer(5);
+        $shop = new ShopGroupCore();
+        $price = $order->total_paid;
+        $products = $order->getProducts();
+        $customers = CustomerCore::getCustomers();
+        $orders = Order::getCustomerOrders(5);*/
+        //$products = $orders->getProducts();
+
+        echo json_encode('something');//something you want to return
+        exit;
     }
 
     public function ajaxProcessCheckIfClientExist()

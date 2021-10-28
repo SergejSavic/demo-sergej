@@ -33,6 +33,17 @@ class APIClientRepository
     }
 
     /**
+     * @return false|string
+     */
+    public static function returnAccessToken()
+    {
+        $tableName = 'api_client_table';
+        $query = 'SELECT `access_token` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+
+        return \Db::getInstance()->getValue($query);
+    }
+
+    /**
      * @param $id
      * @return false|string
      */
