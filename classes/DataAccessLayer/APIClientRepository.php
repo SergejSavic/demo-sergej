@@ -4,6 +4,10 @@ namespace CleverReachIntegration\DataAccessLayer;
 
 use CleverReachIntegration\Presentation\Models\APIClient;
 
+/**
+ * Class APIClientRepository
+ * @package CleverReachIntegration\DataAccessLayer
+ */
 class APIClientRepository
 {
     /**
@@ -11,11 +15,11 @@ class APIClientRepository
      * @param string $id
      * @throws \PrestaShopException
      */
-    public function createApiClient(string $token, string $id)
+    public function createApiClient($token, $id)
     {
         $apiClient = new APIClient();
-        $apiClient->access_token = $token;
-        $apiClient->id_field = $id;
+        $apiClient->accessToken = $token;
+        $apiClient->idField = $id;
         $apiClient->save();
     }
 

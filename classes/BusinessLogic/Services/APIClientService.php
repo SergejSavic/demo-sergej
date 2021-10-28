@@ -4,6 +4,10 @@ namespace CleverReachIntegration\BusinessLogic\Services;
 
 use CleverReachIntegration\DataAccessLayer\APIClientRepository;
 
+/**
+ * Class APIClientService
+ * @package CleverReachIntegration\BusinessLogic\Services
+ */
 class APIClientService
 {
     /**
@@ -11,6 +15,9 @@ class APIClientService
      */
     private $apiClientRepository;
 
+    /**
+     * Initializes api client repository
+     */
     public function __construct()
     {
         $this->apiClientRepository = new APIClientRepository();
@@ -20,7 +27,7 @@ class APIClientService
      * @param string $token
      * @param string $id
      */
-    public function createApiClient(string $token, string $id)
+    public function createApiClient($token, $id)
     {
         return $this->apiClientRepository->createApiClient($token, $id);
     }

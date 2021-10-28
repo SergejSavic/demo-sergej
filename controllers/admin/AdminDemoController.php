@@ -2,6 +2,9 @@
 
 use CleverReachIntegration\BusinessLogic\Services\APIClientService;
 
+/**
+ * Class AdminDemoController
+ */
 class AdminDemoController extends ModuleAdminController
 {
     /**
@@ -9,6 +12,9 @@ class AdminDemoController extends ModuleAdminController
      */
     private $apiClientService;
 
+    /**
+     * @throws PrestaShopException
+     */
     public function __construct()
     {
         $this->bootstrap = true;

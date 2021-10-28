@@ -9,25 +9,25 @@ class APIClient extends ObjectModelCore
     /**
      * @var int
      */
-    public $id_client;
+    public $idClient;
     /**
      * @var string
      */
-    public $access_token;
+    public $accessToken;
     /**
      * @var string
      */
-    public $id_field;
+    public $idField;
     /**
      * @var array
      */
     public static $definition = array(
         'table' => 'api_client_table',
-        'primary' => 'id_client',
+        'primary' => 'idClient',
         'multilang' => false,
         'fields' => array(
-            'access_token' => array('type' => self::TYPE_STRING, 'required' => true),
-            'id_field' => array('type' => self::TYPE_STRING, 'required' => true)
+            'accessToken' => array('type' => self::TYPE_STRING, 'required' => true),
+            'idField' => array('type' => self::TYPE_STRING, 'required' => true)
         )
     );
 

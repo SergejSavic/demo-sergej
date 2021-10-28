@@ -4,6 +4,9 @@ use CleverReachIntegration\BusinessLogic\Services\AuthenticationService;
 use CleverReachIntegration\BusinessLogic\Validators\AuthenticationValidator;
 use CleverReachIntegration\BusinessLogic\Services\APIClientService;
 
+/**
+ * Class DemoViewModuleFrontController
+ */
 class DemoViewModuleFrontController extends ModuleFrontController
 {
     /**
@@ -15,6 +18,9 @@ class DemoViewModuleFrontController extends ModuleFrontController
      */
     private $apiClientService;
 
+    /**
+     * Initializes authentication and api client services
+     */
     public function __construct()
     {
         $this->bootstrap = true;
@@ -23,6 +29,9 @@ class DemoViewModuleFrontController extends ModuleFrontController
         parent::__construct();
     }
 
+    /**
+     * Creates api client
+     */
     public function initContent()
     {
         $accessParameters = $this->authService->getAccessParameters($_GET['code']);

@@ -2,6 +2,10 @@
 
 namespace CleverReachIntegration\BusinessLogic\HTTP;
 
+/**
+ * Class Proxy
+ * @package CleverReachIntegration\BusinessLogic\HTTP
+ */
 class Proxy
 {
     /**

@@ -4,6 +4,10 @@ namespace CleverReachIntegration\BusinessLogic\Services;
 
 use CleverReachIntegration\BusinessLogic\HTTP\Proxy;
 
+/**
+ * Class AuthenticationService
+ * @package CleverReachIntegration\BusinessLogic\Services
+ */
 class AuthenticationService
 {
     /**
@@ -11,6 +15,9 @@ class AuthenticationService
      */
     private $proxy;
 
+    /**
+     * Initializes proxy service
+     */
     public function __construct()
     {
         $this->proxy = new Proxy();
@@ -19,7 +26,7 @@ class AuthenticationService
     /**
      * @return string
      */
-    public static function getClientID(): string
+    public static function getClientID()
     {
         return 'rbUPpLYzJh';
     }
@@ -27,7 +34,7 @@ class AuthenticationService
     /**
      * @return string
      */
-    public static function getClientSecret(): string
+    public static function getClientSecret()
     {
         return 'mk2yKjaXbomIcYpf0xqlRrohADIWm2YS';
     }
@@ -36,10 +43,10 @@ class AuthenticationService
      * @param string $code
      * @return array
      */
-    public function getAccessParameters(string $code): array
+    public function getAccessParameters($code)
     {
-        $fields = ['client_id' => AuthenticationService::getClientID(), 'client_secret' => AuthenticationService::getClientSecret(),
-            'redirect_uri' => 'http://prestashop.test/en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code];
+        $fields = array('client_id' => AuthenticationService::getClientID(), 'client_secret' => AuthenticationService::getClientSecret(),
+            'redirect_uri' => 'http://prestashop.test/en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code);
 
         return $this->proxy->post("https://rest.cleverreach.com/oauth/token.php", $fields);
     }
@@ -48,7 +55,7 @@ class AuthenticationService
      * @param string $access_token
      * @return string
      */
-    public function getId(string $access_token): string
+    public function getId($access_token)
     {
         $userData = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/debug/whoami.json', $access_token);
 
