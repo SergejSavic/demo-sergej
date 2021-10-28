@@ -4,6 +4,10 @@ namespace CleverReachIntegration\Presentation\Models;
 
 use ObjectModelCore;
 
+/**
+ * Class APIClient
+ * @package CleverReachIntegration\Presentation\Models
+ */
 class APIClient extends ObjectModelCore
 {
     /**

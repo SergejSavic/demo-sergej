@@ -45,7 +45,7 @@ class AuthenticationService
      */
     public function getAccessParameters($code)
     {
-        $fields = array('client_id' => AuthenticationService::getClientID(), 'client_secret' => AuthenticationService::getClientSecret(),
+        $fields = array('client_id' => self::getClientID(), 'client_secret' => self::getClientSecret(),
             'redirect_uri' => 'http://prestashop.test/en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code);
 
         return $this->proxy->post("https://rest.cleverreach.com/oauth/token.php", $fields);
