@@ -59,6 +59,14 @@ class APIClientService
     }
 
     /**
+     * @return false|string
+     */
+    public function getSyncStatus()
+    {
+        return $this->apiClientRepository->getSyncStatus();
+    }
+
+    /**
      * Changes load status of the synchronization page
      */
     public function changeLoadStatus()

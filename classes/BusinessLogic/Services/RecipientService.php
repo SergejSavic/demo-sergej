@@ -55,7 +55,7 @@ class RecipientService
      */
     public function synchronize()
     {
-        $this->changeSyncStatus("in progress");
+        $this->changeSyncStatus("In progress");
         $group = $this->getApiGroup();
         $recipients = $this->prepareRecipients();
         $recipientsCount = count($recipients);
@@ -68,12 +68,16 @@ class RecipientService
                 if ($this->getTimeDifferenceInSeconds() < 30) {
                     $this->apiClientRepository->changeBatchUpdateTime();
                 } else {
-                    $this->changeSyncStatus("error");
+                    $this->changeSyncStatus("Error");
                     break;
                 }
             }
-            $recipientJSON = json_encode($recipients[$i-1]->getArray());
+            $recipientJSON = json_encode($recipients[$i - 1]->getArray());
             $this->proxy->postWithHTTPHeader("https://rest.cleverreach.com/v3/groups.json/" . $group['id'] . "/receivers", $recipientJSON, $this->token);
+
+            if ($i === $recipientsCount) {
+                $this->changeSyncStatus("Done");
+            }
         }
     }
 

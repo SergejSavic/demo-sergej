@@ -41,11 +41,10 @@ class AdminDemoController extends ModuleAdminController
         } else {
             $clientID = $this->apiClientService->getClientID();
             $this->setTemplateFile('syncPage.tpl', array('clientID' => $clientID));
-            /*if ($this->apiClientService->isFirstTimeLoad()) {
+            if ($this->apiClientService->isFirstTimeLoad()) {
                 $this->apiClientService->changeLoadStatus();
                 $this->recipientService->synchronize();
-            }*/
-            //$this->recipientService->synchronize();
+            }
         }
 
         parent::initContent();
@@ -59,6 +58,25 @@ class AdminDemoController extends ModuleAdminController
         $clientID = $this->apiClientService->getClientID();
         echo ($clientID !== false) ? json_encode(true) : json_encode(false);
         exit;
+    }
+
+    /**
+     * Checks sync status
+     */
+    public function ajaxProcessCheckSyncStatus()
+    {
+        $syncStatus = $this->apiClientService->getSyncStatus();
+        echo json_encode($syncStatus);
+        exit;
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function ajaxProcessSynchronize()
+    {
+        $this->recipientService->synchronize();
     }
 
     /**

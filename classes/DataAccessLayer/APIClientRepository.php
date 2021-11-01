@@ -95,6 +95,17 @@ class APIClientRepository
     }
 
     /**
+     * @return false|string
+     */
+    public function getSyncStatus()
+    {
+        $tableName = $this->getApiClientTable();
+        $query = 'SELECT `syncStatus` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+
+        return Db::getInstance()->getValue($query);
+    }
+
+    /**
      * @return string
      */
     private function getApiClientTable()

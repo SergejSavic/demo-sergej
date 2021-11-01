@@ -20,6 +20,10 @@ p.clientIdSync {
     display: inline-block;
 }
 
+.disable {
+    pointer-events: none;
+}
+
 div.contentContainerSync {
     width: 30vw;
     margin: 0 auto;
@@ -30,9 +34,9 @@ span.syncStatusSync {
     font-size: 20px;
 }
 
-span.DoneSync {
+.DoneSync {
     font-size: 20px;
-    margin-left: 5vw;
+    margin-left: 7vw;
     color: green;
 }
 
@@ -42,23 +46,18 @@ span.DoneSync {
     margin-left: 0vw;
 }
 
-span.inProgressSync {
+.inProgressSync {
     font-size: 20px;
-    margin-left: .2vw;
+    margin-left: 6vw;
     color: coral;
 }
 
-span.ErrorSync {
+.ErrorSync {
     font-size: 20px;
-    margin-left: .2vw;
+    margin-left: 7vw;
     color: red;
 }
 
-span.pipeSync {
-    margin: 0 .3vw;
-    color: black;
-    font-size: 20px;
-}
 
 button.submitBtnSync {
     background: #ff781f;
