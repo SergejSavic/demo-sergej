@@ -19,14 +19,6 @@ class Recipient
     /**
      * @var string
      */
-    private $activated;
-    /**
-     * @var string
-     */
-    private $deactivated;
-    /**
-     * @var string
-     */
     private $source;
     /**
      * @var array
@@ -35,7 +27,7 @@ class Recipient
     /**
      * @var array
      */
-    private $global_attributes;
+    private $globalAttributes;
     /**
      * @var array
      */
@@ -48,23 +40,19 @@ class Recipient
     /**
      * @param string $email
      * @param string $registered
-     * @param string $activated
-     * @param string $deactivated
      * @param string $source
      * @param array $attributes
-     * @param array $global_attributes
+     * @param array $globalAttributes
      * @param array $tags
      * @param array $orders
      */
-    public function __construct($email, $registered, $activated, $deactivated, $source, $attributes, $global_attributes, $tags, $orders)
+    public function __construct($email, $registered, $source, $attributes, $globalAttributes, $tags, $orders)
     {
         $this->email = $email;
         $this->registered = $registered;
-        $this->activated = $activated;
-        $this->deactivated = $deactivated;
         $this->source = $source;
         $this->attributes = $attributes;
-        $this->global_attributes = $global_attributes;
+        $this->globalAttributes = $globalAttributes;
         $this->tags = $tags;
         $this->orders = $orders;
     }
@@ -85,21 +73,6 @@ class Recipient
         return $this->registered;
     }
 
-    /**
-     * @return string
-     */
-    public function getActivated()
-    {
-        return $this->activated;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeactivated()
-    {
-        return $this->deactivated;
-    }
 
     /**
      * @return string
@@ -122,7 +95,7 @@ class Recipient
      */
     public function getGlobalAttributes()
     {
-        return $this->global_attributes;
+        return $this->globalAttributes;
     }
 
     /**
@@ -139,6 +112,28 @@ class Recipient
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrdersArray()
+    {
+        $ordersArray = array();
+        foreach ($this->getOrders() as $order) {
+            $ordersArray[] = $order->getArray();
+        }
+
+        return $ordersArray;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArray()
+    {
+        return array("email" => $this->getEmail(), "registered" => $this->getRegistered(), "source" => $this->getSource(), "attributes" => (object)array(),
+            "global_attributes" => $this->getGlobalAttributes(), "tags" => $this->getTags(), "orders" => $this->getOrdersArray());
     }
 
 }

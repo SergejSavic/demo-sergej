@@ -1,6 +1,7 @@
 <?php
 
 use CleverReachIntegration\BusinessLogic\Services\APIClientService;
+use CleverReachIntegration\BusinessLogic\Services\RecipientService;
 
 /**
  * Class AdminDemoController
@@ -13,16 +14,24 @@ class AdminDemoController extends ModuleAdminController
     private $apiClientService;
 
     /**
+     * @var RecipientService
+     */
+    private $recipientService;
+
+    /**
      * @throws PrestaShopException
      */
     public function __construct()
     {
         $this->bootstrap = true;
         $this->apiClientService = new APIClientService();
+        $this->recipientService = new RecipientService();
         parent::__construct();
     }
 
     /**
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      * @throws SmartyException
      */
     public function initContent()
@@ -32,12 +41,13 @@ class AdminDemoController extends ModuleAdminController
         } else {
             $clientID = $this->apiClientService->getClientID();
             $this->setTemplateFile('syncPage.tpl', array('clientID' => $clientID));
+            /*if ($this->apiClientService->isFirstTimeLoad()) {
+                $this->apiClientService->changeLoadStatus();
+                $this->recipientService->synchronize();
+            }*/
+            //$this->recipientService->synchronize();
         }
-        $this->apiClientService->synchronize();
-        /*if ($this->apiClientService->isFirstTimeLoad()) {
-            $this->apiClientService->changeLoadStatus();
-            $this->apiClientService->synchronize();
-        }*/
+
         parent::initContent();
     }
 

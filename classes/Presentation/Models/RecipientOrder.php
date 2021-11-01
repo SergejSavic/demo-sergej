@@ -11,15 +11,15 @@ class RecipientOrder
     /**
      * @var string
      */
-    private $order_id;
+    private $orderId;
     /**
      * @var string
      */
-    private $product_id;
+    private $productId;
     /**
      * @var string
      */
-    private $product_name;
+    private $productName;
     /**
      * @var float
      */
@@ -35,26 +35,26 @@ class RecipientOrder
     /**
      * @var string
      */
-    private $mailing_id;
+    private $mailingId;
 
     /**
-     * @param string $order_id
-     * @param string $product_id
-     * @param string $product_name
+     * @param string $orderId
+     * @param string $productId
+     * @param string $productName
      * @param float $price
      * @param string $currency
      * @param int $amount
-     * @param string $mailing_id
+     * @param string $mailingId
      */
-    public function __construct($order_id, $product_id, $product_name, $price, $currency, $amount, $mailing_id)
+    public function __construct($orderId, $productId, $productName, $price, $currency, $amount, $mailingId)
     {
-        $this->order_id = $order_id;
-        $this->product_id = $product_id;
-        $this->product_name = $product_name;
+        $this->orderId = $orderId;
+        $this->productId = $productId;
+        $this->productName = $productName;
         $this->price = $price;
         $this->currency = $currency;
         $this->amount = $amount;
-        $this->mailing_id = $mailing_id;
+        $this->mailingId = $mailingId;
     }
 
     /**
@@ -62,7 +62,7 @@ class RecipientOrder
      */
     public function getOrderId()
     {
-        return $this->order_id;
+        return $this->orderId;
     }
 
     /**
@@ -70,7 +70,7 @@ class RecipientOrder
      */
     public function getProductId()
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
     /**
@@ -78,7 +78,7 @@ class RecipientOrder
      */
     public function getProductName()
     {
-        return $this->product_name;
+        return $this->productName;
     }
 
     /**
@@ -110,7 +110,16 @@ class RecipientOrder
      */
     public function getMailingId()
     {
-        return $this->mailing_id;
+        return $this->mailingId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArray()
+    {
+        return array("order_id" => $this->getOrderId(), "product_id" => $this->getProductId(), "product" => $this->getProductName(),
+            "price" => $this->getPrice(), "currency" => $this->getCurrency(), "amount" => $this->getAmount(), "mailing_id" => $this->getMailingId());
     }
 
 }

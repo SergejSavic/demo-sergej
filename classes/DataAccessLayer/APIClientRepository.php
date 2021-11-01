@@ -3,6 +3,7 @@
 namespace CleverReachIntegration\DataAccessLayer;
 
 use CleverReachIntegration\Presentation\Models\APIClient;
+use Db;
 
 /**
  * Class APIClientRepository
@@ -23,6 +24,8 @@ class APIClientRepository
         $apiClient->idField = $id;
         $apiClient->syncStatus = 'none';
         $apiClient->isFirstTimeLoad = 1;
+        $apiClient->lastBatchUpdatedTime = date("Y-m-d H:i:s");
+
         return $apiClient->save();
     }
 
@@ -34,7 +37,7 @@ class APIClientRepository
         $tableName = $this->getApiClientTable();
         $query = 'SELECT `idField` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
-        return \Db::getInstance()->getValue($query);
+        return Db::getInstance()->getValue($query);
     }
 
     /**
@@ -45,20 +48,7 @@ class APIClientRepository
         $tableName = 'api_client_table';
         $query = 'SELECT `accessToken` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
-        return \Db::getInstance()->getValue($query);
-    }
-
-    /**
-     * @param $id
-     * @return false|string
-     */
-    public function getCurrencyById($id)
-    {
-        $tableName = 'currency';
-        $query = 'SELECT `iso_code` FROM `' . _DB_PREFIX_ . pSQL($tableName) .
-            '` WHERE `id_currency` = "'.pSQL($id).'"';
-
-        return \Db::getInstance()->getValue($query);
+        return Db::getInstance()->getValue($query);
     }
 
     /**
@@ -69,7 +59,7 @@ class APIClientRepository
         $tableName = $this->getApiClientTable();
         $query = 'SELECT `isFirstTimeLoad` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
 
-        return \Db::getInstance()->getValue($query) == 1;
+        return (int)Db::getInstance()->getValue($query) === 1;
     }
 
     /**
@@ -80,18 +70,28 @@ class APIClientRepository
         $id = $this->getClientID();
         $tableName = $this->getApiClientTable();
         $updateData = array('isFirstTimeLoad' => 0);
-        \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
+        Db::getInstance()->update($tableName, $updateData, 'idField=' . $id);
     }
 
     /**
-     * @param string $status
+     * @param int $id
      */
-    public function changeSyncStatus($status)
+    public function changeBatchUpdateTime($id = 1)
     {
-        $id = $this->getClientID();
         $tableName = $this->getApiClientTable();
-        $updateData = array('syncStatus' => $status);
-        \Db::getInstance()->update($tableName, $updateData, 'idField=' .$id);
+        $updateData = array('lastBatchUpdatedTime' => date("Y-m-d H:i:s"));
+        \Db::getInstance()->update($tableName, $updateData, 'idClient=' . $id);
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getLastBatchUpdatedTime()
+    {
+        $tableName = $this->getApiClientTable();
+        $query = 'SELECT `lastBatchUpdatedTime` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+
+        return Db::getInstance()->getValue($query);
     }
 
     /**

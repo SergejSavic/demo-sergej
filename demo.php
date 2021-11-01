@@ -53,6 +53,7 @@ class Demo extends Module
             `idField` varchar(100) NOT NULL,
             `isFirstTimeLoad` tinyint(1) NOT NULL,
             `syncStatus` varchar(50) NOT NULL,
+            `lastBatchUpdatedTime` datetime DEFAULT NULL,
             PRIMARY KEY (`idClient`)
             ) ENGINE = ' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;')
             && $this->registerHooksMethod();

@@ -30,6 +30,10 @@ class APIClient extends ObjectModelCore
      * @var string
      */
     public $syncStatus;
+    /**
+     * @var string
+     */
+    public $lastBatchUpdatedTime;
 
     /**
      * @var array
@@ -42,7 +46,8 @@ class APIClient extends ObjectModelCore
             'accessToken' => array('type' => self::TYPE_STRING, 'required' => true),
             'idField' => array('type' => self::TYPE_STRING, 'required' => true),
             'isFirstTimeLoad' => array('type' => self::TYPE_BOOL, 'required' => true),
-            'syncStatus' => array('type' => self::TYPE_STRING, 'required' => true)
+            'syncStatus' => array('type' => self::TYPE_STRING, 'required' => true),
+            'lastBatchUpdatedTime' => array('type' => self::TYPE_DATE, 'required' => true)
         )
     );
 
