@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     let container = document.getElementById('container');
-    let loginButton = document.getElementById('submitBtn');
-    let contentContainer = document.getElementById('contentContainer');
-    let headerImage = document.getElementById('headerImage');
+    let loginButton = document.getElementById('submit-btn');
+    let contentContainer = document.getElementById('content-container');
+    let headerImage = document.getElementById('header-image');
     let iframe = document.createElement('iframe');
-    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=http://prestashop.test/en/module/demo/view';
+    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' + redirectURL;
     iframe.classList.add('iframe');
 
     if (loginButton !== null) {
         loginButton.addEventListener("click", function () {
-            container.style.border = 'none';
-            contentContainer.style.display = 'none';
-            headerImage.style.display = 'none';
+            container.classList.add('no-border');
+            contentContainer.classList.add('no-display');
+            headerImage.classList.add('no-display');
             container.appendChild(iframe);
             interval = setInterval(checkIfApiClientExist, 50);
         });
