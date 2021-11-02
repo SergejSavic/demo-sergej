@@ -1,4 +1,4 @@
-div.containerSync {
+div.container-sync {
     border: 2px solid black;
     width: 50vw;
     height: 64vh;
@@ -6,13 +6,13 @@ div.containerSync {
     margin-top: 3vh;
 }
 
-img.headerImageSync {
+img.header-image-sync {
     padding-left: 1vw;
     width: 20vw;
     height: 10vh;
 }
 
-p.clientIdSync {
+p.clientid-sync {
     font-size: 23px;
     font-weight: 700;
     float: right;
@@ -24,17 +24,17 @@ p.clientIdSync {
     pointer-events: none;
 }
 
-div.contentContainerSync {
+div.content-container-sync {
     width: 30vw;
     margin: 0 auto;
     margin-top: 15vh;
 }
 
-span.syncStatusSync {
+span.sync-status {
     font-size: 20px;
 }
 
-.DoneSync {
+.done-sync {
     font-size: 20px;
     margin-left: 7vw;
     color: green;
@@ -46,20 +46,20 @@ span.syncStatusSync {
     margin-left: 0vw;
 }
 
-.inProgressSync {
+.in-progress-sync {
     font-size: 20px;
     margin-left: 6vw;
     color: coral;
 }
 
-.ErrorSync {
+.error-sync {
     font-size: 20px;
     margin-left: 7vw;
     color: red;
 }
 
 
-button.submitBtnSync {
+button.submit-btn-sync {
     background: #ff781f;
     cursor: pointer;
     color: white;
@@ -72,6 +72,6 @@ button.submitBtnSync {
     height: 6vh;
 }
 
-#containerBody {
+#container-body {
     background: white;
 }

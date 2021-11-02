@@ -19,6 +19,10 @@ class Recipient
     /**
      * @var string
      */
+    private $activated;
+    /**
+     * @var string
+     */
     private $source;
     /**
      * @var array
@@ -40,16 +44,18 @@ class Recipient
     /**
      * @param string $email
      * @param string $registered
+     * @param string $activated
      * @param string $source
      * @param array $attributes
      * @param array $globalAttributes
      * @param array $tags
      * @param array $orders
      */
-    public function __construct($email, $registered, $source, $attributes, $globalAttributes, $tags, $orders)
+    public function __construct($email, $registered, $activated, $source, $attributes, $globalAttributes, $tags, $orders)
     {
         $this->email = $email;
         $this->registered = $registered;
+        $this->activated = $activated;
         $this->source = $source;
         $this->attributes = $attributes;
         $this->globalAttributes = $globalAttributes;
@@ -115,6 +121,14 @@ class Recipient
     }
 
     /**
+     * @return string
+     */
+    public function getActivated()
+    {
+        return $this->activated;
+    }
+
+    /**
      * @return array
      */
     private function getOrdersArray()
@@ -132,7 +146,7 @@ class Recipient
      */
     public function getArray()
     {
-        return array("email" => $this->getEmail(), "registered" => $this->getRegistered(), "source" => $this->getSource(), "attributes" => (object)array(),
+        return array("email" => $this->getEmail(), "registered" => $this->getRegistered(), "activated" => $this->getActivated(), "source" => $this->getSource(), "attributes" => (object)array(),
             "global_attributes" => $this->getGlobalAttributes(), "tags" => $this->getTags(), "orders" => $this->getOrdersArray());
     }
 

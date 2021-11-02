@@ -1,12 +1,12 @@
 <head></head>
-<body id="containerBody">
-<div id="containerSync" class="containerSync">
-    <img id="headerImageSync" class="headerImageSync" src="http://prestashop.test/modules/cleverreach/views/img/logo_cleverreach.svg">
-    <p id="clientIdSync" class="clientIdSync">{l s='Cliend Id :' mod='demo-sergej'} {$clientID}</p>
-    <div id="contentContainerSync" class="contentContainerSync">
-        <p id="paragraphSync" class="paragraphSync"><span class="syncStatusSync">{l s='Sync Status :' mod='demo-sergej'}</span>
-            <span id="spanSyncStatus" class="inProgressSync">{l s='In progress' mod='demo-sergej'}</span></p>
-        <button id="submitBtnSync" class="submitBtnSync disable" type="submit">{l s='Synchronize' mod='demo-sergej'}</button>
+<body id="container-body">
+<div id="container-sync" class="container-sync">
+    <img id="header-image-sync" class="header-image-sync" src="http://prestashop.test/modules/cleverreach/views/img/logo_cleverreach.svg">
+    <p id="clientid-sync" class="clientid-sync">{l s='Cliend Id :' mod='demo-sergej'} {$clientID}</p>
+    <div id="content-container-sync" class="content-container-sync">
+        <p id="paragraph-sync" class="paragraph-sync"><span class="sync-status">{l s='Sync Status :' mod='demo-sergej'}</span>
+            <span id="span-sync-status" class="in-progress-sync">{l s='In progress' mod='demo-sergej'}</span></p>
+        <button id="submit-btn-sync" class="submit-btn-sync disable" type="submit">{l s='Synchronize' mod='demo-sergej'}</button>
     </div>
 </div>
 </body>

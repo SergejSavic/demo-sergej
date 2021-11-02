@@ -13,17 +13,6 @@ use PrestaShop\PrestaShop\Adapter\Entity\Shop;
 class RecipientRepository
 {
     /**
-     * @param $status
-     * @param $id
-     */
-    public function changeSyncStatus($status, $id)
-    {
-        $tableName = $this->getApiClientTable();
-        $updateData = array('syncStatus' => $status);
-        \Db::getInstance()->update($tableName, $updateData, 'idField=' . $id);
-    }
-
-    /**
      * @param bool $onlyActive
      * @throws \PrestaShopDatabaseException
      */

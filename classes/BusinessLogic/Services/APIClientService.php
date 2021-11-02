@@ -3,6 +3,7 @@
 namespace CleverReachIntegration\BusinessLogic\Services;
 
 use CleverReachIntegration\DataAccessLayer\APIClientRepository;
+use PrestaShopException;
 
 /**
  * Class APIClientService
@@ -35,7 +36,7 @@ class APIClientService
      * @param string $token
      * @param $id
      * @return bool
-     * @throws \PrestaShopException
+     * @throws PrestaShopException
      */
     public function createApiClient($token, $id)
     {

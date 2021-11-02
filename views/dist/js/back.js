@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     let container = document.getElementById('container');
-    let loginButton = document.getElementById('submitBtn');
-    let contentContainer = document.getElementById('contentContainer');
-    let headerImage = document.getElementById('headerImage');
-    let containerSync = document.getElementById('containerSync');
-    let spanSyncStatus = document.getElementById('spanSyncStatus');
-    let syncButton = document.getElementById('submitBtnSync');
+    let loginButton = document.getElementById('submit-btn');
+    let contentContainer = document.getElementById('content-container');
+    let headerImage = document.getElementById('header-image');
+    let containerSync = document.getElementById('container-sync');
+    let spanSyncStatus = document.getElementById('span-sync-status');
+    let syncButton = document.getElementById('submit-btn-sync');
     let iframe = document.createElement('iframe');
-    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=http://prestashop.test/en/module/demo/view';
+    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' + redirectURL;
     iframe.classList.add('iframe');
 
     if (container !== null) {
@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     if (loginButton !== null) {
         loginButton.addEventListener("click", function () {
-            container.classList.add('noBorder');
-            contentContainer.classList.add('noDisplay');
-            headerImage.classList.add('noDisplay');
+            container.classList.add('no-border');
+            contentContainer.classList.add('no-display');
+            headerImage.classList.add('no-display');
             container.appendChild(iframe);
             interval = setInterval(checkIfApiClientExists, 500);
         });
@@ -66,15 +66,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     function editSyncTemplate(data) {
         if (data === 'In progress') {
-            spanSyncStatus.classList.add('inProgressSync');
+            spanSyncStatus.classList.add('in-progress-sync');
         } else {
-            spanSyncStatus.classList.remove('inProgressSync');
+            spanSyncStatus.classList.remove('in-progress-sync');
             syncButton.classList.remove('disable');
             clearInterval(syncInterval);
             if (data === 'Done') {
-                spanSyncStatus.classList.add('DoneSync');
+                spanSyncStatus.classList.add('done-sync');
             } else {
-                spanSyncStatus.classList.add('ErrorSync');
+                spanSyncStatus.classList.add('error-sync');
             }
             syncButton.addEventListener("click", synchronize);
         }
@@ -82,9 +82,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     function synchronize() {
-        spanSyncStatus.classList.remove('DoneSync');
-        spanSyncStatus.classList.remove('ErrorSync');
-        spanSyncStatus.classList.add('inProgressSync');
+        spanSyncStatus.classList.remove('done-sync');
+        spanSyncStatus.classList.remove('error-sync');
+        spanSyncStatus.classList.add('in-progress-sync');
         spanSyncStatus.innerHTML = 'In progress';
         syncInterval = setInterval(checkSyncStatus, 500);
         $.ajax({

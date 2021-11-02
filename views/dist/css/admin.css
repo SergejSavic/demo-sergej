@@ -1,3 +1,4 @@
+
 div.container {
     width: 50vw;
     height: 64vh;
@@ -5,20 +6,20 @@ div.container {
     margin-top: 3vh;
 }
 
-img.headerImage {
+img.header-image {
     padding-left: 1vw;
     width: 16vw;
     height: 10vh;
 }
 
-div.contentContainer {
+div.content-container {
     border: 2px solid black;
     height: 36vh;
     width: 22vw;
     margin: 2vh auto;
 }
 
-div.connectDiv {
+div.connect-div {
     width: 17vw;
     margin-left: 2.5vw;
 }
@@ -30,25 +31,25 @@ div.connectDiv {
     margin-left: 0vw;
 }
 
-img.contentImage {
+img.content-image {
     height: 10vh;
     width: 18vw;
     margin: 0 2vw;
 }
 
-h2.welcomeHeader {
+h2.welcome-header {
     font-size: 26px;
     width: 18vw;
     font-weight: 100;
     margin-left: 2vw;
 }
 
-p.connectParagraph {
+p.connect-paragraph {
     font-size: 16px;
     font-weight: 400;
 }
 
-button.submitBtn {
+button.submit-btn {
     background: #ff781f;
     cursor: pointer;
     color: white;
@@ -69,7 +70,7 @@ span.second {
     margin-left: 3vw;
 }
 
-.noDisplay {
+.no-display {
     display: none;
 }
 
@@ -77,11 +78,10 @@ span.second {
     border: 2px solid black;
 }
 
-.noBorder {
+.no-border {
     border: none;
 }
 
-#containerBody {
+#container-body {
     background: white;
 }
-

@@ -95,6 +95,17 @@ class APIClientRepository
     }
 
     /**
+     * @param string $status
+     */
+    public function changeSyncStatus($status)
+    {
+        $tableName = $this->getApiClientTable();
+        $id = $this->getClientID();
+        $updateData = array('syncStatus' => $status);
+        \Db::getInstance()->update($tableName, $updateData, 'idField=' . $id);
+    }
+
+    /**
      * @return false|string
      */
     public function getSyncStatus()
