@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let contentContainer = document.getElementById('content-container');
     let headerImage = document.getElementById('header-image');
     let iframe = document.createElement('iframe');
+    let intreval;
     iframe.src = cleverReachURL;
     iframe.classList.add('iframe');
 
@@ -17,16 +18,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
         });
     }
 
-    function checkIfApiClientExist() {
-        fetch('http://prestashop.test/module/demo/validation', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(function (response) {
-            if (response.status === 200) {
-                clearInterval(interval);
-                location.reload();
+    function checkIfApiClientExists() {
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            url: adminAjaxLink,
+            data: {
+                ajax: true,
+                action: 'checkifclientexist'
+            },
+            success: function (data) {
+                if (data == true) {
+                    clearInterval(interval);
+                    location.reload();
+                }
             }
         });
     }
