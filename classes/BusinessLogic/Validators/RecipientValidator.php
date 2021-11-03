@@ -10,12 +10,11 @@ class RecipientValidator
 {
     /**
      * @param $customer
-     * @param array $orders
      * @return array
      */
-    public static function validateRecipientGlobalAttributes($customer, $orders)
+    public static function validateRecipientGlobalAttributes($customer)
     {
-        $globalAttributes = array('firstname' => $customer['firstname'], 'lastname' => $customer['lastname'], 'shop' => $customer['name']);
+        $globalAttributes = array('firstname' => $customer['firstname'], 'lastname' => $customer['lastname'], 'shop' => $customer['shop']);
 
         if ($customer['company'] !== null && $customer['company'] !== '') {
             $globalAttributes['company'] = $customer['company'];
@@ -28,24 +27,20 @@ class RecipientValidator
         } else {
             $globalAttributes['newsletter'] = 'false';
         }
-
-        if (count($orders) > 0) {
-
-            if ($orders[0]['address1'] !== null && $orders[0]['address1'] !== '') {
-                $globalAttributes['street'] = $orders[0]['address1'];
-            }
-
-            if ($orders[0]['city'] !== null && $orders[0]['city'] !== '') {
-                $globalAttributes['city'] = $orders[0]['city'];
-            }
-
-            if ($orders[0]['phone'] !== null && $orders[0]['phone'] !== '') {
-                $globalAttributes['phone'] = $orders[0]['phone'];
-            }
-
-            if ($orders[0]['postcode'] !== null && $orders[0]['postcode'] !== '') {
-                $globalAttributes['zip'] = $orders[0]['postcode'];
-            }
+        if ($customer['address1'] !== null && $customer['address1'] !== '') {
+            $globalAttributes['street'] = $customer['address1'];
+        }
+        if ($customer['country'] !== null && $customer['country'] !== '') {
+            $globalAttributes['country'] = $customer['country'];
+        }
+        if ($customer['city'] !== null && $customer['city'] !== '') {
+            $globalAttributes['city'] = $customer['city'];
+        }
+        if ($customer['phone'] !== null && $customer['phone'] !== '') {
+            $globalAttributes['phone'] = $customer['phone'];
+        }
+        if ($customer['postcode'] !== null && $customer['postcode'] !== '') {
+            $globalAttributes['zip'] = $customer['postcode'];
         }
 
         return $globalAttributes;

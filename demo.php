@@ -5,6 +5,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 if (!defined('_PS_VERSION_'))
     return false;
 
+use CleverReachIntegration\BusinessLogic\Services\RecipientService;
+
 /**
  * Class Demo
  */
@@ -79,13 +81,24 @@ class Demo extends Module
     }
 
     /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function hookActionCustomerAccountAdd($params)
+    {
+        //$recipientService = new RecipientService();
+        //$recipientService->synchronizeCreatedCustomer(($params['newCustomer'])->id);
+    }
+
+    /**
      * Sets css and js files for admin controllers
      */
     private function initControllerAssets()
     {
         if (Tools::getValue('controller') === 'AdminDemo') {
             $adminAjaxLink = $this->context->link->getAdminLink('AdminDemo');
-            $redirectURL = Tools::getHttpHost(true).__PS_BASE_URI__.'en/module/demo/view';
+            $redirectURL = Tools::getHttpHost(true) . __PS_BASE_URI__ . 'en/module/demo/view';
             Media::addJsDef(array(
                 'adminAjaxLink' => $adminAjaxLink,
                 'redirectURL' => $redirectURL
@@ -101,7 +114,8 @@ class Demo extends Module
      */
     private function registerHooksMethod()
     {
-        return $this->registerHook('displayBackOfficeHeader') && $this->registerHook('actionFrontControllerSetMedia');
+        return $this->registerHook('displayBackOfficeHeader') && $this->registerHook('actionFrontControllerSetMedia')
+            && $this->registerHook('actionCustomerAccountAdd');
     }
 
 }

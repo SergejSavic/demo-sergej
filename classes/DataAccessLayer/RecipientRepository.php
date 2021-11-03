@@ -13,18 +13,64 @@ use PrestaShop\PrestaShop\Adapter\Entity\Shop;
 class RecipientRepository
 {
     /**
-     * @param bool $onlyActive
+     * @param $offset
+     * @param $limit
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      * @throws \PrestaShopDatabaseException
      */
-    public function getPrestaShopCustomers()
+    public function getPrestaShopCustomers($offset, $limit)
+    {
+        return \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
+            '
+            SELECT p.`id_customer`, p.`email`, p.`firstname`, p.`lastname`, p.`date_add`, p.`id_shop`, p.`company`, p.`birthday`, p.`newsletter`,s.`name` as `shop`,
+                   ad.`address1`,ad.`city`,ad.`phone`,ad.`postcode`,cnt.`name` as `country`
+            FROM `' . _DB_PREFIX_ . 'customer` p LEFT JOIN `' . _DB_PREFIX_ . 'shop` s ON (p.`id_shop` = s.`id_shop`)
+            LEFT JOIN `' . _DB_PREFIX_ . 'address` ad ON (ad.`id_customer` = p.`id_customer`)
+            LEFT JOIN `' . _DB_PREFIX_ . 'country_lang` cnt ON (ad.`id_country` = cnt.`id_country`)
+            WHERE p.`active`=1 AND (cnt.`id_lang` is null or cnt.`id_lang`=1)
+            GROUP BY p.`email`
+            ORDER BY p.`id_customer` ASC
+            limit ' . pSQL($limit) . ' OFFSET ' . pSQL($offset) . '
+            '
+        );
+    }
+
+    /**
+     * @param $customerId
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getSingleCustomer($customerId)
     {
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
             SELECT p.`id_customer`, p.`email`, p.`firstname`, p.`lastname`, p.`date_add`, p.`id_shop`, p.`company`, p.`birthday`, p.`newsletter`,s.`name`
             FROM `' . _DB_PREFIX_ . 'customer` p LEFT JOIN `' . _DB_PREFIX_ . 'shop` s ON (p.`id_shop` = s.`id_shop`)
-            WHERE p.`active`=1 
-            ORDER BY p.`id_customer` ASC'
+            WHERE p.`active`=1 AND p.`id_customer`="' . pSQL($customerId) . '"'
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShopName()
+    {
+        $tableName = 'shop';
+        $query = 'SELECT `name` FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`';
+
+        return \Db::getInstance()->getValue($query);
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getCustomerNumber()
+    {
+        $tableName = 'customer';
+        $query = 'SELECT count(*) FROM `' . _DB_PREFIX_ . pSQL($tableName) . '`
+        WHERE `active`=1';
+
+        return \Db::getInstance()->getValue($query);
     }
 
     /**
@@ -90,20 +136,19 @@ class RecipientRepository
         }
 
         $res = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
-        SELECT o.*,cu.`iso_code`,ad.`address1`,ad.`city`,ad.`phone`,ad.`postcode`,
+        SELECT o.*,cu.`iso_code`,
           (SELECT SUM(od.`product_quantity`) FROM `' . _DB_PREFIX_ . 'order_detail` od WHERE od.`id_order` = o.`id_order`) nb_products,
           (SELECT oh.`id_order_state` FROM `' . _DB_PREFIX_ . 'order_history` oh
            LEFT JOIN `' . _DB_PREFIX_ . 'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
            WHERE oh.`id_order` = o.`id_order` ' .
             (!$show_hidden_status ? ' AND os.`hidden` != 1' : '') .
             ' ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC LIMIT 1) id_order_state
-        FROM `' . _DB_PREFIX_ . 'orders` o
-        LEFT JOIN `' . _DB_PREFIX_ . 'currency` cu ON (cu.`id_currency` = o.`id_currency`)
-        LEFT JOIN `' . _DB_PREFIX_ . 'address` ad ON (ad.`id_address` = o.`id_address_invoice`)
-        WHERE o.`id_customer` = ' . (int)$id_customer .
+            FROM `' . _DB_PREFIX_ . 'orders` o
+            LEFT JOIN `' . _DB_PREFIX_ . 'currency` cu ON (cu.`id_currency` = o.`id_currency`)
+            WHERE o.`id_customer` = ' . (int)$id_customer .
             Shop::addSqlRestriction(Shop::SHARE_ORDER) . '
-        GROUP BY o.`id_order`
-        ORDER BY o.`date_add` DESC');
+            GROUP BY o.`id_order`
+            ORDER BY o.`date_add` DESC');
 
         if (!$res) {
             return array();

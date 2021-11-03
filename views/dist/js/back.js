@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function (event) {
+    const IN_PROGRESS = 'In progress';
+    const DONE = 'Done';
+    const ERROR = 'Error';
     let container = document.getElementById('container');
     let loginButton = document.getElementById('submit-btn');
     let contentContainer = document.getElementById('content-container');
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     if (containerSync !== null) {
+        setTimeout(isFirstTimeLoad, 500);
         syncInterval = setInterval(checkSyncStatus, 500);
     }
 
@@ -47,6 +51,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         });
     }
 
+    function isFirstTimeLoad() {
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            url: adminAjaxLink,
+            data: {
+                ajax: true,
+                action: 'isfirsttimeload'
+            },
+            success: function (data) {
+                if (data === true) {
+                    changeLoadStatus();
+                    synchronize();
+                }
+            }
+        });
+    }
+
     function checkSyncStatus() {
         $.ajax({
             type: 'POST',
@@ -59,19 +82,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
             },
             success: function (data) {
                 editSyncTemplate(data);
-                console.log(data);
             }
         });
     }
 
+    function changeLoadStatus() {
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            url: adminAjaxLink,
+            data: {
+                ajax: true,
+                action: 'changeloadstatus'
+            }
+        });
+    }
+
+
     function editSyncTemplate(data) {
-        if (data === 'In progress') {
+        if (data === IN_PROGRESS) {
             spanSyncStatus.classList.add('in-progress-sync');
+            syncButton.classList.add('disable');
         } else {
             spanSyncStatus.classList.remove('in-progress-sync');
             syncButton.classList.remove('disable');
             clearInterval(syncInterval);
-            if (data === 'Done') {
+            if (data === DONE) {
                 spanSyncStatus.classList.add('done-sync');
             } else {
                 spanSyncStatus.classList.add('error-sync');
@@ -85,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         spanSyncStatus.classList.remove('done-sync');
         spanSyncStatus.classList.remove('error-sync');
         spanSyncStatus.classList.add('in-progress-sync');
-        spanSyncStatus.innerHTML = 'In progress';
+        spanSyncStatus.innerHTML = IN_PROGRESS;
         syncInterval = setInterval(checkSyncStatus, 500);
         $.ajax({
             type: 'POST',

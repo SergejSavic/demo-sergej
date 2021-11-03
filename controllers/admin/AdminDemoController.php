@@ -41,13 +41,7 @@ class AdminDemoController extends ModuleAdminController
         } else {
             $clientID = $this->apiClientService->getClientID();
             $this->setTemplateFile('syncPage.tpl', array('clientID' => $clientID));
-            if ($this->apiClientService->isFirstTimeLoad()) {
-                $this->apiClientService->changeLoadStatus();
-                $this->recipientService->synchronize();
-            }
         }
-
-        parent::initContent();
     }
 
     /**
@@ -58,6 +52,24 @@ class AdminDemoController extends ModuleAdminController
         $clientID = $this->apiClientService->getClientID();
         echo ($clientID !== false) ? json_encode(true) : json_encode(false);
         exit;
+    }
+
+    /**
+     * Checks if sync page is loaded for the first time
+     */
+    public function ajaxProcessIsFirstTimeLoad()
+    {
+        $loadStatus = $this->apiClientService->isFirstTimeLoad();
+        echo json_encode($loadStatus);
+        exit;
+    }
+
+    /**
+     * Changes load status
+     */
+    public function ajaxProcessChangeLoadStatus()
+    {
+        $this->apiClientService->changeLoadStatus();
     }
 
     /**
@@ -89,6 +101,7 @@ class AdminDemoController extends ModuleAdminController
         $template = $this->context->smarty->createTemplate($this->getTemplatePath() . $templateName, $this->context->smarty);
         $template->assign($variables);
         $this->content .= $template->fetch();
+        parent::initContent();
     }
 
 }

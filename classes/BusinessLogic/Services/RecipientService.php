@@ -11,6 +11,7 @@ use CleverReachIntegration\Presentation\Models\Group;
 use CleverReachIntegration\Presentation\Models\Recipient;
 use CleverReachIntegration\Presentation\Models\RecipientOrder;
 use CleverReachIntegration\DataAccessLayer\RecipientRepository;
+use CleverReachIntegration\Presentation\Models\SyncStatus;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
@@ -19,6 +20,7 @@ use PrestaShopException;
  */
 class RecipientService
 {
+
     /**
      * @var int
      */
@@ -58,11 +60,31 @@ class RecipientService
      */
     public function synchronize()
     {
-        $this->changeSyncStatus("In progress");
+        $this->changeSyncStatus(SyncStatus::IN_PROGRESS);
         $group = $this->getApiGroup();
-        $recipients = $this->prepareRecipients();
-        $recipientsCount = count($recipients);
-        $this->synchronizeInBatches($recipients, $recipientsCount, $group);
+        $this->prepareRecipients($group);
+    }
+
+    /**
+     * @param $id
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @throws PrestaShopDatabaseException
+     */
+    public function getSinglePrestaShopCustomer($id)
+    {
+        return $this->recipientRepository->getSingleCustomer($id);
+    }
+
+    /**
+     * @param $customerId
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function synchronizeCreatedCustomer($customerId)
+    {
+        $customer = $this->getSinglePrestaShopCustomer($customerId);
+        $recipient = $this->createRecipient(array(), $customer);
+        $recipientJSON = json_encode($recipient->getArray());
     }
 
     /**
@@ -78,10 +100,11 @@ class RecipientService
      */
     private function getApiGroup()
     {
-        $groupModel = new Group('prestashopCustomers', 'Prestashop customers');
+        $shopName = $this->recipientRepository->getShopName();
+        $groupModel = new Group($shopName, 'Prestashop customers');
         $fields = json_encode($groupModel->getArray());
 
-        return ($this->isGroupExisting('prestashopCustomers')) ?:
+        return ($this->groupExists($shopName)) ?:
             $this->proxy->postWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json', $fields, $this->token);
     }
 
@@ -89,7 +112,7 @@ class RecipientService
      * @param string $name
      * @return mixed|null
      */
-    private function isGroupExisting($name)
+    private function groupExists($name)
     {
         $groups = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json', $this->token);
         foreach ($groups as $group) {
@@ -102,31 +125,38 @@ class RecipientService
     }
 
     /**
-     * @return mixed
+     * @param int $offset
+     * @param int $limit
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      * @throws PrestaShopDatabaseException
      */
-    private function getPrestaShopCustomers()
+    private function getPrestaShopCustomers($offset, $limit)
     {
-        return $this->recipientRepository->getPrestaShopCustomers();
+        return $this->recipientRepository->getPrestaShopCustomers($offset, $limit);
     }
 
     /**
-     * @return array
+     * @param $group
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
+     * @throws Exception
      */
-    private function prepareRecipients()
+    private function prepareRecipients($group)
     {
-        $customers = $this->getPrestaShopCustomers();
-        $recipients = array();
+        $numberOfCustomers = (int)$this->recipientRepository->getCustomerNumber();
 
-        foreach ($customers as $customer) {
-            $orders = $this->recipientRepository->getCustomerOrders($customer['id_customer']);
-            $recipient = $this->createRecipient($orders, $customer);
-            $recipients[] = $recipient;
+        for ($i = 1; $i <= ($numberOfCustomers / self::SYNCHRONIZATION_BATCH); $i++) {
+            $customers = $this->getPrestaShopCustomers(($i - 1) * self::SYNCHRONIZATION_BATCH, self::SYNCHRONIZATION_BATCH);
+            $recipients = array();
+
+            foreach ($customers as $customer) {
+                $orders = $this->recipientRepository->getCustomerOrders($customer['id_customer']);
+                $recipient = $this->createRecipient($orders, $customer);
+                $recipients[] = $recipient;
+            }
+
+            $this->synchronizeWithBatch($recipients, $group, $i);
         }
-
-        return $recipients;
     }
 
     /**
@@ -149,11 +179,12 @@ class RecipientService
                 $recipientOrders[] = $recipientOrder;
             }
         }
-        $globalAttributes = RecipientValidator::validateRecipientGlobalAttributes($customer, $orders);
+
+        $globalAttributes = RecipientValidator::validateRecipientGlobalAttributes($customer);
         $tags = $this->setRecipientTags($customer['id_customer']);
 
         return new Recipient($customer['email'], (explode(" ", $customer['date_add']))[0], (explode(" ", $customer['date_add']))[0],
-            $customer['name'], array(), $globalAttributes, $tags, $recipientOrders);
+            $customer['shop'], array(), $globalAttributes, $tags, $recipientOrders);
     }
 
     /**
@@ -175,30 +206,30 @@ class RecipientService
 
     /**
      * @param $recipients
-     * @param $recipientsCount
      * @param $group
      * @throws Exception
      */
-    private function synchronizeInBatches($recipients, $recipientsCount, $group)
+    private function synchronizeWithBatch($recipients, $group, $batchNumber)
     {
-        for ($i = 1; $i <= $recipientsCount; $i++) {
-            if ($i === 1) {
+        for ($i = 1; $i <= self::SYNCHRONIZATION_BATCH; $i++) {
+            if ($batchNumber === 1 && $i === 1) {
                 $this->apiClientRepository->changeBatchUpdateTime();
             }
             if ($i % self::SYNCHRONIZATION_BATCH === 0) {
                 if ($this->getTimeDifferenceInSeconds() < 30) {
                     $this->apiClientRepository->changeBatchUpdateTime();
                 } else {
-                    $this->changeSyncStatus("Error");
+                    $this->changeSyncStatus(SyncStatus::ERROR);
                     break;
                 }
             }
+
+            if ($batchNumber === 10 && $i === self::SYNCHRONIZATION_BATCH) {
+                $this->changeSyncStatus(SyncStatus::DONE);
+            }
+
             $recipientJSON = json_encode($recipients[$i - 1]->getArray());
             $this->proxy->postWithHTTPHeader("https://rest.cleverreach.com/v3/groups.json/" . $group['id'] . "/receivers", $recipientJSON, $this->token);
-
-            if ($i === $recipientsCount) {
-                $this->changeSyncStatus("Done");
-            }
         }
     }
 
