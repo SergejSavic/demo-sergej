@@ -98,10 +98,11 @@ class Demo extends Module
     {
         if (Tools::getValue('controller') === 'AdminDemo') {
             $adminAjaxLink = $this->context->link->getAdminLink('AdminDemo');
-            $redirectURL = Tools::getHttpHost(true) . __PS_BASE_URI__ . 'en/module/demo/view';
+            $cleverReachURL = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' .
+                Tools::getHttpHost(true) . __PS_BASE_URI__ . 'en/module/demo/view';
             Media::addJsDef(array(
                 'adminAjaxLink' => $adminAjaxLink,
-                'redirectURL' => $redirectURL
+                'cleverReachURL' => $cleverReachURL
             ));
             $this->context->controller->addCSS($this->_path . 'views/dist/css/admin.css');
             $this->context->controller->addCSS($this->_path . 'views/dist/css/sync_page.css');

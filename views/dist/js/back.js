@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let spanSyncStatus = document.getElementById('span-sync-status');
     let syncButton = document.getElementById('submit-btn-sync');
     let iframe = document.createElement('iframe');
-    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' + redirectURL;
+    iframe.src = cleverReachURL;
     iframe.classList.add('iframe');
 
     if (container !== null) {
