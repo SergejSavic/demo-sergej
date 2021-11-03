@@ -14,14 +14,9 @@ class AuthenticationValidator
      */
     public static function validate($accessParameters)
     {
-        if($accessParameters['access_token']
-        && $accessParameters['refresh_token']
-        && $accessParameters['token_type']
-        && $accessParameters['scope']) {
-
-            return true;
-        }
-
-        return false;
+        return $accessParameters['access_token'] && !empty($accessParameters['access_token'])
+            && $accessParameters['refresh_token'] && !empty($accessParameters['refresh_token'])
+            && $accessParameters['token_type'] && !empty($accessParameters['token_type'])
+            && $accessParameters['scope'] && !empty($accessParameters['scope']);
     }
 }

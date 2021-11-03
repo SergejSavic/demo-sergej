@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let spanSyncStatus = document.getElementById('span-sync-status');
     let syncButton = document.getElementById('submit-btn-sync');
     let iframe = document.createElement('iframe');
+    let interval;
+    let syncInterval;
     iframe.src = cleverReachURL;
     iframe.classList.add('iframe');
 

@@ -3,6 +3,7 @@
 namespace CleverReachIntegration\BusinessLogic\Services;
 
 use CleverReachIntegration\BusinessLogic\HTTP\Proxy;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 
 /**
  * Class AuthenticationService
@@ -10,6 +11,10 @@ use CleverReachIntegration\BusinessLogic\HTTP\Proxy;
  */
 class AuthenticationService
 {
+    /**
+     * @var string
+     */
+    const BASE_API_URL = 'https://rest.cleverreach.com/';
     /**
      * @var Proxy
      */
@@ -46,9 +51,9 @@ class AuthenticationService
     public function getAccessParameters($code)
     {
         $fields = array('client_id' => self::getClientID(), 'client_secret' => self::getClientSecret(),
-            'redirect_uri' => 'http://prestashop.test/en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code);
+            'redirect_uri' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'en/module/demo/view', 'grant_type' => 'authorization_code', 'code' => $code);
 
-        return $this->proxy->post("https://rest.cleverreach.com/oauth/token.php", $fields);
+        return $this->proxy->post(self::BASE_API_URL . 'oauth/token.php', $fields);
     }
 
     /**
@@ -57,7 +62,7 @@ class AuthenticationService
      */
     public function getId($accessToken)
     {
-        $userData = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/debug/whoami.json', $accessToken);
+        $userData = $this->proxy->getWithHTTPHeader(self::BASE_API_URL . 'v3/debug/whoami.json', $accessToken);
 
         return $userData['id'];
     }

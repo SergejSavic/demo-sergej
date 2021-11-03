@@ -20,7 +20,6 @@ use PrestaShopException;
  */
 class RecipientService
 {
-
     /**
      * @var int
      */
