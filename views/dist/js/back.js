@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let contentContainer = document.getElementById('content-container');
     let headerImage = document.getElementById('header-image');
     let iframe = document.createElement('iframe');
-    iframe.src = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' + redirectURL;
+    iframe.src = cleverReachURL;
     iframe.classList.add('iframe');
 
     if (loginButton !== null) {
