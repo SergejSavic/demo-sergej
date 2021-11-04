@@ -57,4 +57,15 @@ class Proxy
 
         return json_decode(curl_exec($curl), true);
     }
+
+    public function put($url, $data, $accessToken)
+    {
+        $url .= '?token=' . $accessToken;
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+
+        $response = curl_exec($curl);
+    }
 }

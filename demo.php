@@ -87,15 +87,37 @@ class Demo extends Module
      */
     public function hookActionCustomerAccountAdd($params)
     {
-        //$recipientService = new RecipientService();
-        //$recipientService->synchronizeCreatedCustomer(($params['newCustomer'])->id);
+        $recipientService = new RecipientService();
+        $recipientService->synchronizeCreatedOrUpdatedCustomer(($params['newCustomer'])->id);
     }
+
+    /**
+     * @throws PrestaShopException
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionObjectCustomerAddAfter($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->synchronizeCreatedOrUpdatedCustomer(($params['object'])->id);
+    }
+
+    /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionCustomerAddGroups($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->updateCreatedCustomerGroups($params['id_customer'], $params['groups']);
+    }
+
 
     /**
      * Sets css and js files for admin controllers
      */
     private function initControllerAssets()
     {
+
         if (Tools::getValue('controller') === 'AdminDemo') {
             $adminAjaxLink = $this->context->link->getAdminLink('AdminDemo');
             $cleverReachURL = 'http://rest.cleverreach.com/oauth/authorize.php?client_id=rbUPpLYzJh&grant=basic&response_type=code&redirect_uri=' .
@@ -116,7 +138,10 @@ class Demo extends Module
     private function registerHooksMethod()
     {
         return $this->registerHook('displayBackOfficeHeader') && $this->registerHook('actionFrontControllerSetMedia')
-            && $this->registerHook('actionCustomerAccountAdd');
+            && $this->registerHook('actionCustomerAccountAdd') && $this->registerHook('actionCustomerAccountUpdate')
+            && $this->registerHook('actionValidateCustomerAddressForm') && $this->registerHook('actionValidateOrder')
+            && $this->registerHook('actionObjectCustomerAddAfter') && $this->registerHook('actionCustomerAddGroups')
+            && $this->registerHook('actionCustomerAccountUpdateBefore') && $this->registerHook('actionObjectCustomerUpdateBefore');
     }
 
 }

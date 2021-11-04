@@ -44,9 +44,13 @@ class RecipientRepository
     {
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
-            SELECT p.`id_customer`, p.`email`, p.`firstname`, p.`lastname`, p.`date_add`, p.`id_shop`, p.`company`, p.`birthday`, p.`newsletter`,s.`name`
+            SELECT p.`id_customer`, p.`email`, p.`firstname`, p.`lastname`, p.`date_add`, p.`id_shop`, p.`company`, p.`birthday`, p.`newsletter`,s.`name` as `shop`
+            ,ad.`address1`, ad.`city`,ad.`phone`,ad.`postcode`,ad.`id_address`,  cnt.`id_country` as `country`
             FROM `' . _DB_PREFIX_ . 'customer` p LEFT JOIN `' . _DB_PREFIX_ . 'shop` s ON (p.`id_shop` = s.`id_shop`)
-            WHERE p.`active`=1 AND p.`id_customer`="' . pSQL($customerId) . '"'
+            LEFT JOIN `' . _DB_PREFIX_ . 'address` ad ON (ad.`id_customer` = p.`id_customer`)
+            LEFT JOIN `' . _DB_PREFIX_ . 'country_lang` cnt ON (ad.`id_country` = cnt.`id_country`)
+            WHERE p.`active`=1 AND p.`id_customer`="' . pSQL($customerId) . '"
+           '
         );
     }
 
