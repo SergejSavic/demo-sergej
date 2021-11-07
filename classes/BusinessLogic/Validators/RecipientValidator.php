@@ -10,22 +10,29 @@ class RecipientValidator
 {
     /**
      * @param $customer
-     * @return array
+     * @param array $attributes
+     * @return array|mixed
      */
-    public static function validateRecipientGlobalAttributes($customer)
+    public static function validateRecipientGlobalAttributes($customer, $updatedAttributes = array())
     {
-        $globalAttributes = array('firstname' => $customer['firstname'], 'lastname' => $customer['lastname'], 'shop' => $customer['shop']);
+        $globalAttributes = $updatedAttributes;
+        if (count($updatedAttributes) === 0) {
+            $globalAttributes = array('firstname' => $customer['firstname'], 'lastname' => $customer['lastname']);
 
+            if ($customer['birthday'] !== null && $customer['birthday'] !== '' && $customer['birthday'] !== '0000-00-00') {
+                $globalAttributes['birthday'] = $customer['birthday'];
+            }
+            if ($customer['newsletter'] === '1') {
+                $globalAttributes['newsletter'] = 'true';
+            } else {
+                $globalAttributes['newsletter'] = 'false';
+            }
+        }
+        if ($customer['shop'] !== null && $customer['shop'] !== '') {
+            $globalAttributes['shop'] = $customer['shop'];
+        }
         if ($customer['company'] !== null && $customer['company'] !== '') {
             $globalAttributes['company'] = $customer['company'];
-        }
-        if ($customer['birthday'] !== null && $customer['birthday'] !== '' && $customer['birthday'] !== '0000-00-00') {
-            $globalAttributes['birthday'] = $customer['birthday'];
-        }
-        if ($customer['newsletter'] === '1') {
-            $globalAttributes['newsletter'] = 'true';
-        } else {
-            $globalAttributes['newsletter'] = 'false';
         }
         if ($customer['address1'] !== null && $customer['address1'] !== '') {
             $globalAttributes['street'] = $customer['address1'];
@@ -45,4 +52,5 @@ class RecipientValidator
 
         return $globalAttributes;
     }
+
 }

@@ -31,7 +31,7 @@ class RecipientOrder
     /**
      * @var int
      */
-    private $amount;
+    private $quantity;
     /**
      * @var string
      */
@@ -43,17 +43,17 @@ class RecipientOrder
      * @param string $productName
      * @param float $price
      * @param string $currency
-     * @param int $amount
+     * @param int $quantity
      * @param string $mailingId
      */
-    public function __construct($orderId, $productId, $productName, $price, $currency, $amount, $mailingId)
+    public function __construct($orderId, $productId, $productName, $price, $currency, $quantity, $mailingId)
     {
         $this->orderId = $orderId;
         $this->productId = $productId;
         $this->productName = $productName;
         $this->price = $price;
         $this->currency = $currency;
-        $this->amount = $amount;
+        $this->quantity = $quantity;
         $this->mailingId = $mailingId;
     }
 
@@ -100,9 +100,9 @@ class RecipientOrder
     /**
      * @return int
      */
-    public function getAmount()
+    public function getQuantity()
     {
-        return $this->amount;
+        return $this->quantity;
     }
 
     /**
@@ -119,7 +119,7 @@ class RecipientOrder
     public function getArray()
     {
         return array("order_id" => $this->getOrderId(), "product_id" => $this->getProductId(), "product" => $this->getProductName(),
-            "price" => $this->getPrice(), "currency" => $this->getCurrency(), "amount" => $this->getAmount(), "mailing_id" => $this->getMailingId());
+            "price" => $this->getPrice(), "currency" => $this->getCurrency(), "quantity" => $this->getQuantity(), "mailing_id" => $this->getMailingId());
     }
 
 }

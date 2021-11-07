@@ -12,6 +12,7 @@ use CleverReachIntegration\Presentation\Models\Recipient;
 use CleverReachIntegration\Presentation\Models\RecipientOrder;
 use CleverReachIntegration\DataAccessLayer\RecipientRepository;
 use CleverReachIntegration\Presentation\Models\SyncStatus;
+use CleverReachIntegration\BusinessLogic\Validators\CustomerValidator;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
@@ -20,6 +21,10 @@ use PrestaShopException;
  */
 class RecipientService
 {
+    /**
+     * @var string
+     */
+    const BASE_API_URL = 'https://rest.cleverreach.com/v3/';
     /**
      * @var int
      */
@@ -80,6 +85,8 @@ class RecipientService
     }
 
     /**
+     * @param $customerId
+     * @param $groups
      * @throws PrestaShopDatabaseException
      */
     public function updateCreatedCustomerGroups($customerId, $groups)
@@ -87,9 +94,14 @@ class RecipientService
         $customer = $this->getSinglePrestaShopCustomer($customerId);
         $email = $customer[0]['email'];
         $tags = $this->createRecipientTags($groups);
-        $group = $this->group;
+        $oldTags = $this->setRecipientTags($customerId);
+        if (count($oldTags) > 0 && (serialize($tags) !== serialize($oldTags))) {
+            $tagsToDelete = $this->createTagsForDeleteString($oldTags);
+            $url = self::BASE_API_URL . 'receivers.json/' . $email . '/tags/' . $tagsToDelete;
+            $this->proxy->delete($url, $this->token);
+        }
         $updateData = array("tags" => $tags);
-        $this->proxy->put('https://rest.cleverreach.com/v3/groups.json/' . $group['id'] . "/receivers/" . $email, $updateData, $this->token);
+        $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . "/receivers/" . $email, $updateData, $this->token);
     }
 
     /**
@@ -102,19 +114,70 @@ class RecipientService
         $customer = $this->getSinglePrestaShopCustomer($customerId);
         $recipient = $this->createRecipient(array(), $customer[0]);
         $recipientJSON = json_encode($recipient->getArray());
-        $group = $this->group;
-        $this->proxy->postWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json/' . $group['id'] . "/receivers", $recipientJSON, $this->token);
+        $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . "/receivers", $recipientJSON, $this->token);
     }
 
     /**
+     * @param $updatedCustomer
+     * @param $customerId
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function synchronizeUpdatedCustomer($updatedCustomer, $customerId)
+    {
+        $customerBeforeUpdate = ($this->getSinglePrestaShopCustomer($customerId))[0];
+
+        if (($customerBeforeUpdate['email'] === $updatedCustomer->email) && !CustomerValidator::isSameData($updatedCustomer, $customerBeforeUpdate)) {
+            $globalAttributes = array('firstname' => $updatedCustomer->firstname, 'lastname' => $updatedCustomer->lastname,
+                'birthday' => $updatedCustomer->birthday, 'newsletter' => 'false');
+            $updateData['global_attributes'] = $globalAttributes;
+            $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . '/receivers/' . $updatedCustomer->email, $updateData, $this->token);
+        } elseif ($customerBeforeUpdate['email'] !== $updatedCustomer->email) {
+            $updateData = array('deactivated' => '1');
+            $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . '/receivers/' . $customerBeforeUpdate['email'], $updateData, $this->token);
+            $updatedCustomerArray = json_decode(json_encode($updatedCustomer), true);
+            $orders = $this->recipientRepository->getCustomerOrders($customerBeforeUpdate['id_customer']);
+            $recipient = $this->createRecipient($orders, $updatedCustomerArray);
+            $updatedGlobalAttributes = RecipientValidator::validateRecipientGlobalAttributes($customerBeforeUpdate, $recipient->getGlobalAttributes());
+            $recipient->setGlobalAttributes($updatedGlobalAttributes);
+            $tags = $this->setRecipientTags($customerBeforeUpdate['id_customer']);
+            $recipient->setTags($tags);
+            $recipientJSON = json_encode($recipient->getArray());
+            $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . "/receivers", $recipientJSON, $this->token);
+        }
+    }
+
+    /**
+     * @param $orderId
+     * @param $orderReference
+     * @param $isoCode
+     * @param $email
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function updateRecipientOrder($orderId, $orderReference, $isoCode, $email)
+    {
+        $orderProducts = $this->createRecipientOrders($orderId, $orderReference, $isoCode);
+        $orderArray = array();
+        foreach ($orderProducts as $orderProduct) {
+            $orderArray[] = $orderProduct->getArray();
+        }
+        $updateData = array('orders' => $orderArray);
+        $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . '/receivers/' . $email, $updateData, $this->token);
+    }
+
+    /**
+     * @param $customerId
+     * @param $data
      * @throws PrestaShopDatabaseException
      */
-    public function synchronizeUpdatedCustomer($customerId, $email)
+    public function updateRecipientAddress($customerId, $data)
     {
-        $customer = $this->getSinglePrestaShopCustomer($customerId);
-        if ($customer[0]['email'] === $email) {
-            $name = "";
-        }
+        $customer = ($this->recipientRepository->getSingleCustomer($customerId))[0];
+        $globalAttributes = array('street' => $data['address1'], 'company' => $data['company'], 'zip' => $data['postcode'],
+            'city' => $data['city'], 'phone' => $data['phone']);
+        $updateData = array('global_attributes' => $globalAttributes);
+        $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . "/receivers/" . $customer['email'], $updateData, $this->token);
     }
 
     /**
@@ -135,7 +198,7 @@ class RecipientService
         $fields = json_encode($groupModel->getArray());
 
         return ($this->groupExists($shopName)) ?:
-            $this->proxy->postWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json', $fields, $this->token);
+            $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/', $fields, $this->token);
     }
 
     /**
@@ -144,7 +207,7 @@ class RecipientService
      */
     private function groupExists($name)
     {
-        $groups = $this->proxy->getWithHTTPHeader('https://rest.cleverreach.com/v3/groups.json', $this->token);
+        $groups = $this->proxy->getWithHTTPHeader(self::BASE_API_URL . 'groups.json/', $this->token);
         foreach ($groups as $group) {
             if ($group['name'] === $name) {
                 return $group;
@@ -218,6 +281,28 @@ class RecipientService
     }
 
     /**
+     * @param $orderId
+     * @param $orderReference
+     * @param $isoCode
+     * @return array
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    private function createRecipientOrders($orderId, $orderReference, $isoCode)
+    {
+        $customerOrder = new Order($orderId);
+        $products = $customerOrder->getProducts();
+        $recipientOrders = array();
+        foreach ($products as $product) {
+            $recipientOrder = new RecipientOrder($orderReference, $product['id_product'], $product['product_name'], $product['product_price'],
+                $isoCode, (int)$product['product_quantity'], '');
+            $recipientOrders[] = $recipientOrder;
+        }
+
+        return $recipientOrders;
+    }
+
+    /**
      * @param $customerId
      * @return array
      * @throws PrestaShopDatabaseException
@@ -225,7 +310,7 @@ class RecipientService
     private function setRecipientTags($customerId)
     {
         $tags = array();
-        $groupIds = $this->recipientRepository->getCustomerGroups($customerId);
+        $groupIds = ($this->recipientRepository->getCustomerGroups($customerId));
         foreach ($groupIds as $groupId) {
             $groupName = $this->recipientRepository->getGroupById((int)$groupId['id_group']);
             $tags[] = $groupName;
@@ -275,8 +360,25 @@ class RecipientService
             }
 
             $recipientJSON = json_encode($recipients[$i - 1]->getArray());
-            $this->proxy->postWithHTTPHeader("https://rest.cleverreach.com/v3/groups.json/" . $group['id'] . "/receivers", $recipientJSON, $this->token);
+            $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/' . $group['id'] . "/receivers", $recipientJSON, $this->token);
         }
+    }
+
+    /**
+     * @param $tags
+     * @return string
+     */
+    private function createTagsForDeleteString($tags)
+    {
+        $tagString = '';
+        foreach ($tags as $key => $tag) {
+            if ($key !== 0) {
+                $tagString .= '%2C';
+            }
+            $tagString .= $tag;
+        }
+
+        return $tagString;
     }
 
     /**

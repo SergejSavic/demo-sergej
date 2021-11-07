@@ -129,6 +129,22 @@ class Recipient
     }
 
     /**
+     * @param array $globalAttributes
+     */
+    public function setGlobalAttributes($globalAttributes)
+    {
+        $this->globalAttributes = $globalAttributes;
+    }
+
+    /**
+     * @param array $tags
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    /**
      * @return array
      */
     private function getOrdersArray()

@@ -45,7 +45,7 @@ class RecipientRepository
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
             SELECT p.`id_customer`, p.`email`, p.`firstname`, p.`lastname`, p.`date_add`, p.`id_shop`, p.`company`, p.`birthday`, p.`newsletter`,s.`name` as `shop`
-            ,ad.`address1`, ad.`city`,ad.`phone`,ad.`postcode`,ad.`id_address`,  cnt.`id_country` as `country`
+            ,ad.`address1`, ad.`city`,ad.`phone`,ad.`postcode`,ad.`id_address`,  cnt.`name` as `country`
             FROM `' . _DB_PREFIX_ . 'customer` p LEFT JOIN `' . _DB_PREFIX_ . 'shop` s ON (p.`id_shop` = s.`id_shop`)
             LEFT JOIN `' . _DB_PREFIX_ . 'address` ad ON (ad.`id_customer` = p.`id_customer`)
             LEFT JOIN `' . _DB_PREFIX_ . 'country_lang` cnt ON (ad.`id_country` = cnt.`id_country`)
@@ -82,13 +82,13 @@ class RecipientRepository
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      * @throws \PrestaShopDatabaseException
      */
-    public static function getAddressById($id)
+    public function getAddressByCustomerId($id)
     {
         return \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
             SELECT `address1`, `city`, `phone`, `postcode`
             FROM `' . _DB_PREFIX_ . 'address`
-            WHERE `id_address` = "' . pSQL($id) . '"'
+            WHERE `id_customer` = "' . pSQL($id) . '" AND `deleted`=0 AND `active`=1'
         );
     }
 
@@ -108,7 +108,7 @@ class RecipientRepository
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return false|string
      */
     public function getGroupById($id)

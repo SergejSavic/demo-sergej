@@ -58,6 +58,11 @@ class Proxy
         return json_decode(curl_exec($curl), true);
     }
 
+    /**
+     * @param $url
+     * @param $data
+     * @param $accessToken
+     */
     public function put($url, $data, $accessToken)
     {
         $url .= '?token=' . $accessToken;
@@ -67,5 +72,23 @@ class Proxy
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
 
         $response = curl_exec($curl);
+    }
+
+    /**
+     * @param $url
+     * @param $accessToken
+     * @return bool|string
+     */
+    public function delete($url, $accessToken)
+    {
+        $url .= '?token=' . $accessToken;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        $result = curl_exec($curl);
+        //$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        //curl_close($curl);
+
+        return $result;
     }
 }

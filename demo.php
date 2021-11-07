@@ -111,6 +111,73 @@ class Demo extends Module
         $recipientService->updateCreatedCustomerGroups($params['id_customer'], $params['groups']);
     }
 
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionCustomerAccountUpdate($params)
+    {
+        $name = "";
+        //$recipientService = new RecipientService();
+        //$recipientService->synchronizeUpdatedCustomer(($params['customer'])->id, ($params['customer'])->email);
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionCustomerBeforeUpdateGroup($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->updateCreatedCustomerGroups($params['id_customer'], $params['groups']);
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionObjectAttributeGroupAddBefore(array $params)
+    {
+        $name = "";
+        //$recipientService = new RecipientService();
+        //$recipientService->synchronizeUpdatedCustomer(($params['customer'])->id, ($params['customer'])->email);
+    }
+
+    public function hookActionAttributeGroupSave($params)
+    {
+        $name = "actionValidateOrder";
+        $name1 = 'actionOrderStatusUpdate';
+        $name2 = 'actionOrderStatusPostUpdate';
+    }
+
+    /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionValidateCustomerAddressForm($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->updateRecipientAddress($params['cart']->id_customer, $_POST);
+    }
+
+    /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function hookActionValidateOrder($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->updateRecipientOrder($params['order']->id, $params['order']->reference, $params['currency']->iso_code, $params['customer']->email);
+    }
+
+    /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function hookActionObjectCustomerUpdateBefore($params)
+    {
+        $recipientService = new RecipientService();
+        $recipientService->synchronizeUpdatedCustomer($params['object'], ($params['object'])->id);
+    }
 
     /**
      * Sets css and js files for admin controllers
@@ -141,7 +208,9 @@ class Demo extends Module
             && $this->registerHook('actionCustomerAccountAdd') && $this->registerHook('actionCustomerAccountUpdate')
             && $this->registerHook('actionValidateCustomerAddressForm') && $this->registerHook('actionValidateOrder')
             && $this->registerHook('actionObjectCustomerAddAfter') && $this->registerHook('actionCustomerAddGroups')
-            && $this->registerHook('actionCustomerAccountUpdateBefore') && $this->registerHook('actionObjectCustomerUpdateBefore');
+            && $this->registerHook('actionCustomerAccountUpdateBefore') && $this->registerHook('actionObjectCustomerUpdateBefore')
+            && $this->registerHook('actionCustomerBeforeUpdateGroup') && $this->registerHook('actionObjectAttributeGroupAddBefore')
+            && $this->registerHook('actionAttributeGroupSave');
     }
 
 }
