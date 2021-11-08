@@ -68,15 +68,3 @@ class AuthenticationService
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-

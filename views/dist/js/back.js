@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let contentContainer = document.getElementById('content-container');
     let headerImage = document.getElementById('header-image');
     let iframe = document.createElement('iframe');
-    let intreval;
+    let interval;
     iframe.src = cleverReachURL;
     iframe.classList.add('iframe');
 
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 action: 'checkifclientexist'
             },
             success: function (data) {
-                if (data == true) {
+                if (data === true) {
                     clearInterval(interval);
                     location.reload();
                 }
