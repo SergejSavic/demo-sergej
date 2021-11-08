@@ -153,6 +153,17 @@ class Demo extends Module
     }
 
     /**
+     * @param $params
+     * @throws PrestaShopDatabaseException
+     */
+    public function hookActionObjectCustomerDeleteBefore($params)
+    {
+        $id = $params['object']->id;
+        $recipientService = new RecipientService();
+        $recipientService->deleteRecipient($id);
+    }
+
+    /**
      * Sets css and js files for admin controllers
      */
     private function initControllerAssets()

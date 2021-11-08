@@ -182,6 +182,17 @@ class RecipientService
     }
 
     /**
+     * @param $id
+     * @throws PrestaShopDatabaseException
+     */
+    public function deleteRecipient($id)
+    {
+        $customer = ($this->getSinglePrestaShopCustomer($id))[0];
+        $updateData = array('deactivated' => '1');
+        $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . '/receivers/' . $customer['email'], $updateData, $this->token);
+    }
+
+    /**
      * @param string $status
      */
     private function changeSyncStatus($status)
