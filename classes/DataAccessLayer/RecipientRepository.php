@@ -15,7 +15,7 @@ class RecipientRepository
     /**
      * @param $offset
      * @param $limit
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array|bool
      * @throws \PrestaShopDatabaseException
      */
     public function getPrestaShopCustomers($offset, $limit)
