@@ -22,7 +22,7 @@ class APIClientRepository
         $apiClient = new APIClient();
         $apiClient->accessToken = $token;
         $apiClient->idField = $id;
-        $apiClient->syncStatus = 'In progress';
+        $apiClient->syncStatus = 'IN_PROGRESS';
         $apiClient->isFirstTimeLoad = 1;
         $apiClient->lastBatchUpdatedTime = date("Y-m-d H:i:s");
 

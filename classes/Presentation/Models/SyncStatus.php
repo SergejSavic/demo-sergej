@@ -7,13 +7,13 @@ class SyncStatus
     /**
      * @var string
      */
-    const IN_PROGRESS = 'In progress';
+    const IN_PROGRESS = 'IN_PROGRESS';
     /**
      * @var string
      */
-    const DONE = 'Done';
+    const DONE = 'DONE';
     /**
      * @var string
      */
-    const ERROR = 'Error';
+    const ERROR = 'ERROR';
 }

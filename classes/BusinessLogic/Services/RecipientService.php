@@ -344,25 +344,38 @@ class RecipientService
      */
     private function synchronizeWithBatch($recipients, $group, $batchNumber, $numberOfCustomers)
     {
-        for ($i = 1; $i <= self::SYNCHRONIZATION_BATCH_LENGTH; $i++) {
-            if ($batchNumber === 1 && $i === 1) {
-                $this->apiClientRepository->changeBatchUpdateTime();
-            }
-            if ($i % self::SYNCHRONIZATION_BATCH_LENGTH === 0) {
-                if ($this->getTimeDifferenceInSeconds() < 30) {
-                    $this->apiClientRepository->changeBatchUpdateTime();
-                } else {
-                    $this->changeSyncStatus(SyncStatus::ERROR);
-                    break;
-                }
-            }
-            if ($i === count($recipients) && $batchNumber === (int)ceil($numberOfCustomers / self::SYNCHRONIZATION_BATCH_LENGTH)) {
-                $this->changeSyncStatus(SyncStatus::DONE);
-            }
-
-            $recipientJSON = json_encode($recipients[$i - 1]->getArray());
-            $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/' . $group['id'] . "/receivers", $recipientJSON, $this->token);
+        if ($batchNumber === 1) {
+            $this->apiClientRepository->changeBatchUpdateTime();
         }
+
+        $recipientsJSON = json_encode($this->createMultipleRecipientsArray($recipients));
+        $this->proxy->postWithHTTPHeader(self::BASE_API_URL . 'groups.json/' . $group['id'] . "/receivers/insert", $recipientsJSON, $this->token);
+
+        if ($this->getTimeDifferenceInSeconds() >= 30) {
+            $this->changeSyncStatus(SyncStatus::ERROR);
+
+            return;
+        }
+
+        $this->apiClientRepository->changeBatchUpdateTime();
+
+        if ($batchNumber === (int)ceil($numberOfCustomers / self::SYNCHRONIZATION_BATCH_LENGTH)) {
+            $this->changeSyncStatus(SyncStatus::DONE);
+        }
+    }
+
+    /**
+     * @param $recipients
+     * @return array
+     */
+    private function createMultipleRecipientsArray($recipients)
+    {
+        $recipientsArray = array();
+        foreach ($recipients as $recipient) {
+            $recipientsArray[] = $recipient->getArray();
+        }
+
+        return $recipientsArray;
     }
 
     /**

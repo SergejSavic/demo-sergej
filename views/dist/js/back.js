@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-    const IN_PROGRESS = 'In progress';
-    const DONE = 'Done';
-    const ERROR = 'Error';
+    const IN_PROGRESS = 'IN_PROGRESS';
+    const DONE = 'DONE';
+    const ERROR = 'ERROR';
     let container = document.getElementById('container');
     let loginButton = document.getElementById('submit-btn');
     let contentContainer = document.getElementById('content-container');
