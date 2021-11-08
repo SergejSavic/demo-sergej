@@ -120,7 +120,6 @@ class Demo extends Module
         $recipientService->updateCreatedCustomerGroups($params['id_customer'], $params['groups']);
     }
 
-
     /**
      * @param $params
      * @throws PrestaShopDatabaseException

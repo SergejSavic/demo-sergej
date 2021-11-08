@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 action: 'checkifclientexist'
             },
             success: function (data) {
-                if (data == true) {
+                if (data === true) {
                     clearInterval(interval);
                     location.reload();
                 }

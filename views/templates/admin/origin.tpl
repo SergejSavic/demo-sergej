@@ -1,9 +1,9 @@
 <head></head>
 <body id="container-body">
 <div id="container" class="container">
-    <img id="header-image" class="header-image" src="http://prestashop.test/modules/cleverreach/views/img/logo_cleverreach.svg">
+    <img id="header-image" class="header-image" src={$headerImage}>
     <div id="content-container" class="content-container">
-        <img id="content-image" class="content-image" src="http://prestashop.test/modules/cleverreach/views/img/icon_hello.png">
+        <img id="content-image" class="content-image" src={$contentImage}>
         <h2 id="welcome-header" class="welcome-header">{l s='Welcome to CleverReach' mod='demo-sergej'}</h2>
         <div class="connect-div" id="connect-div">
             <p id="connect-paragraph" class="connect-paragraph">{l s='Connect, sync customer data and create' mod='demo-sergej'}

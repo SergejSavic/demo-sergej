@@ -1,7 +1,7 @@
 <head></head>
 <body id="container-body">
 <div id="container-sync" class="container-sync">
-    <img id="header-image-sync" class="header-image-sync" src="http://prestashop.test/modules/cleverreach/views/img/logo_cleverreach.svg">
+    <img id="header-image-sync" class="header-image-sync" src={$headerImage}>
     <p id="clientid-sync" class="clientid-sync">{l s='Cliend Id :' mod='demo-sergej'} {$clientID}</p>
     <div id="content-container-sync" class="content-container-sync">
         <p id="paragraph-sync" class="paragraph-sync"><span class="sync-status">{l s='Sync Status :' mod='demo-sergej'}</span>
