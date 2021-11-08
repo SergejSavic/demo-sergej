@@ -121,6 +121,19 @@ class RecipientRepository
     }
 
     /**
+     * @param $id
+     * @return false|string
+     */
+    public function getCountryById($id)
+    {
+        $tableName = 'country_lang';
+        $query = 'SELECT `name` FROM `' . _DB_PREFIX_ . pSQL($tableName) .
+            '` WHERE `id_country` = "' . pSQL($id) . '" AND `id_lang` = 1';
+
+        return \Db::getInstance()->getValue($query);
+    }
+
+    /**
      * @param $id_customer
      * @param false $show_hidden_status
      * @param Context|null $context

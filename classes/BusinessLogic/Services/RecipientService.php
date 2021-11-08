@@ -109,7 +109,7 @@ class RecipientService
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function synchronizeCreatedOrUpdatedCustomer($customerId)
+    public function synchronizeCreatedCustomer($customerId)
     {
         $customer = $this->getSinglePrestaShopCustomer($customerId);
         $recipient = $this->createRecipient(array(), $customer[0]);
@@ -174,8 +174,9 @@ class RecipientService
     public function updateRecipientAddress($customerId, $data)
     {
         $customer = ($this->recipientRepository->getSingleCustomer($customerId))[0];
+        $country = $this->recipientRepository->getCountryById($data['id_country']);
         $globalAttributes = array('street' => $data['address1'], 'company' => $data['company'], 'zip' => $data['postcode'],
-            'city' => $data['city'], 'phone' => $data['phone']);
+            'city' => $data['city'], 'phone' => $data['phone'], 'country' => $country);
         $updateData = array('global_attributes' => $globalAttributes);
         $this->proxy->put(self::BASE_API_URL . 'groups.json/' . $this->group['id'] . "/receivers/" . $customer['email'], $updateData, $this->token);
     }

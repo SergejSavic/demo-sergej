@@ -88,7 +88,7 @@ class Demo extends Module
     public function hookActionCustomerAccountAdd($params)
     {
         $recipientService = new RecipientService();
-        $recipientService->synchronizeCreatedOrUpdatedCustomer(($params['newCustomer'])->id);
+        $recipientService->synchronizeCreatedCustomer(($params['newCustomer'])->id);
     }
 
     /**
@@ -98,7 +98,7 @@ class Demo extends Module
     public function hookActionObjectCustomerAddAfter($params)
     {
         $recipientService = new RecipientService();
-        $recipientService->synchronizeCreatedOrUpdatedCustomer(($params['object'])->id);
+        $recipientService->synchronizeCreatedCustomer(($params['object'])->id);
     }
 
     /**
@@ -114,38 +114,12 @@ class Demo extends Module
     /**
      * @throws PrestaShopDatabaseException
      */
-    public function hookActionCustomerAccountUpdate($params)
-    {
-        $name = "";
-        //$recipientService = new RecipientService();
-        //$recipientService->synchronizeUpdatedCustomer(($params['customer'])->id, ($params['customer'])->email);
-    }
-
-    /**
-     * @throws PrestaShopDatabaseException
-     */
     public function hookActionCustomerBeforeUpdateGroup($params)
     {
         $recipientService = new RecipientService();
         $recipientService->updateCreatedCustomerGroups($params['id_customer'], $params['groups']);
     }
 
-    /**
-     * @throws PrestaShopDatabaseException
-     */
-    public function hookActionObjectAttributeGroupAddBefore(array $params)
-    {
-        $name = "";
-        //$recipientService = new RecipientService();
-        //$recipientService->synchronizeUpdatedCustomer(($params['customer'])->id, ($params['customer'])->email);
-    }
-
-    public function hookActionAttributeGroupSave($params)
-    {
-        $name = "actionValidateOrder";
-        $name1 = 'actionOrderStatusUpdate';
-        $name2 = 'actionOrderStatusPostUpdate';
-    }
 
     /**
      * @param $params
@@ -205,12 +179,10 @@ class Demo extends Module
     private function registerHooksMethod()
     {
         return $this->registerHook('displayBackOfficeHeader') && $this->registerHook('actionFrontControllerSetMedia')
-            && $this->registerHook('actionCustomerAccountAdd') && $this->registerHook('actionCustomerAccountUpdate')
-            && $this->registerHook('actionValidateCustomerAddressForm') && $this->registerHook('actionValidateOrder')
-            && $this->registerHook('actionObjectCustomerAddAfter') && $this->registerHook('actionCustomerAddGroups')
-            && $this->registerHook('actionCustomerAccountUpdateBefore') && $this->registerHook('actionObjectCustomerUpdateBefore')
-            && $this->registerHook('actionCustomerBeforeUpdateGroup') && $this->registerHook('actionObjectAttributeGroupAddBefore')
-            && $this->registerHook('actionAttributeGroupSave');
+            && $this->registerHook('actionCustomerAccountAdd') && $this->registerHook('actionValidateCustomerAddressForm')
+            && $this->registerHook('actionValidateOrder') && $this->registerHook('actionObjectCustomerAddAfter')
+            && $this->registerHook('actionCustomerAddGroups') && $this->registerHook('actionObjectCustomerDeleteBefore')
+            && $this->registerHook('actionObjectCustomerUpdateBefore') && $this->registerHook('actionCustomerBeforeUpdateGroup');
     }
 
 }
